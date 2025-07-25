@@ -1,0 +1,23 @@
+{
+    "name": "plsqlls",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "vtmsugimoto@gmail.com",
+    "scripts": {
+        "compile": "tsc -b && tsc-alias",
+        "watch": "concurrently --kill-others \"tsc -b -w\" \"tsc-alias -w\""
+    },
+    "dependencies": {
+        "tree-sitter": "^0.25.0",
+        "vscode-languageserver": "^9.0.1",
+        "vscode-languageserver-textdocument": "^1.0.12",
+        "vscode-uri": "^3.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "concurrently": "^9.1.2",
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.8.3"
+    }
+}

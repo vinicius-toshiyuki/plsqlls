@@ -1,0 +1,60 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "esModuleInterop": true,
+        "target": "es2020",
+        "lib": [
+            "es2020"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "strict": true,
+        "outDir": "out",
+        "rootDir": "src",
+        "paths": {
+            "@util": [
+                "./src/util/index.ts"
+            ],
+            "@treesitter-parser/plsql": [
+                "./src/treesitter-parser/index.ts"
+            ],
+            "@keywords": [
+                "./src/keywords/index.ts"
+            ],
+            "@providers/formatting": [
+                "./src/providers/formatting/index.ts"
+            ],
+            "@providers/completion": [
+                "./src/providers/completion/index.ts"
+            ],
+            "@providers/diagnostics": [
+                "./src/providers/diagnostics/index.ts"
+            ],
+            "@providers/folding": [
+                "./src/providers/folding/index.ts"
+            ],
+            "@providers/rename": [
+                "./src/providers/rename/index.ts"
+            ],
+            "@providers/declaration": [
+                "./src/providers/declaration/index.ts"
+            ],
+            "@providers/definition": [
+                "./src/providers/definition/index.ts"
+            ],
+            "@providers/code-actions": [
+                "./src/providers/code-actions/index.ts"
+            ],
+            "@types": [
+                "./src/types/index.ts"
+            ]
+        }
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
