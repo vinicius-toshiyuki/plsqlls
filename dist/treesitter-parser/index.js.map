@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/treesitter-parser/index.ts"],"names":[],"mappings":";;;;;AAGA,oCAIC;AAPD,8DAAiC;AACjC,yEAA+C;AAE/C,SAAgB,YAAY;IAC1B,MAAM,MAAM,GAAG,IAAI,qBAAM,EAAE,CAAC;IAC5B,MAAM,CAAC,WAAW,CAAC,iBAAK,CAAC,CAAC;IAC1B,OAAO,MAAM,CAAC;AAChB,CAAC"}

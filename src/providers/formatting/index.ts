@@ -18,7 +18,7 @@ import {
 } from "@util";
 import { Query, QueryCapture, SyntaxNode, Tree } from "tree-sitter";
 import { ServerContext } from "@types";
-import PlSql from "../../treesitter-parser/tree_sitter_plsqloracle_binding.node";
+import PlSql from "@treesitter-parser/binding";
 
 const TEXT_WRAP_LENGTH = 120;
 

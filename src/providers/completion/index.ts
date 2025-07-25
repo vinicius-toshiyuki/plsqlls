@@ -7,7 +7,7 @@ import {
   CompletionList,
   CompletionParams,
 } from "vscode-languageserver";
-import PlSql from "../../treesitter-parser/tree_sitter_plsqloracle_binding.node";
+import PlSql from "@treesitter-parser/binding";
 
 function getIndetifierCompletions(node: SyntaxNode): CompletionItem[] {
   const items: { [key: string]: CompletionItem } = {};

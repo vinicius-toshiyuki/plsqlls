@@ -4,6 +4,9 @@
     "description": "",
     "license": "ISC",
     "author": "vtmsugimoto@gmail.com",
+    "bin": {
+        "plsqlls": "cli.js"
+    },
     "scripts": {
         "compile": "tsc -b && tsc-alias",
         "watch": "concurrently --kill-others \"tsc -b -w\" \"tsc-alias -w\""
