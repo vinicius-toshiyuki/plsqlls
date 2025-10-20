@@ -21,19 +21,22 @@ export function getDeclaration(
   identifierNode: SyntaxNode,
   context?: ServerContext,
 ): SyntaxNode | null {
-  let declarationNode: SyntaxNode | null = null;
+  if (context) {
+    const symbol = getSymbol(identifierNode, context.symbols);
+    if (symbol) {
+      return symbol.declaration?.node ?? null;
+    }
+  }
+
   let scope: SyntaxNode | null = getContainingScope(identifierNode);
   const identifierKey = getIdentifierKey(identifierNode);
 
   while (scope) {
-    if (context) {
-      const symbol = getSymbol(identifierNode, context.symbols);
-      if (symbol) {
-        declarationNode = symbol.declaration?.node ?? null;
-      }
-    } else {
-      walkDepthFirst(scope, (node) => {
-        const programNameNode = node.childForFieldName(
+    let declarationNode: SyntaxNode | null = null;
+
+    for (const currentNode of traverse(scope)) {
+      if (!isBuiltinNode(currentNode)) {
+        const programNameNode = currentNode.childForFieldName(
           GRAMMAR.FIELD.PROGRAM_NAME,
         );
         const isDifferentScope = node !== scope && isScopeNode(node);
@@ -58,11 +61,13 @@ export function getDeclaration(
 
         if (candidate && getIdentifierKey(candidate) === identifierKey) {
           declarationNode = candidate;
-          return true;
+          break;
         }
+      }
 
-        return isDifferentScope;
-      });
+      if (scope !== currentNode && isScopeNode(currentNode)) {
+        break;
+      }
     }
 
     if (declarationNode) {
