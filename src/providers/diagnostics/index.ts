@@ -1,4 +1,5 @@
 import {
+  BUILTIN_NODE_TYPES,
   getIdentifierKey,
   getSymbol,
   GRAMMAR,
@@ -51,6 +52,7 @@ function getUndefinedDiagnostics(
 
   walkBreadth(tree.rootNode, (node) => {
     if (
+      !BUILTIN_NODE_TYPES.includes(node.type) &&
       isReference(node) &&
       node.previousSibling?.type !== GRAMMAR.RULE.COLON_PUNCTUATION &&
       getDeclaration(node, context) === null &&
