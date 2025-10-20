@@ -1,6 +1,7 @@
 import {
   BUILTIN_NODE_TYPES,
   getIdentifierKey,
+  getNodeBefore,
   getSymbol,
   GRAMMAR,
   isReference,
@@ -80,6 +81,15 @@ function getUnusedDiagnostics(
   const diagnostics: Diagnostic[] = [];
 
   walkBreadth(tree.rootNode, (node) => {
+    const nodeBefore = getNodeBefore(node);
+    if (
+      nodeBefore?.type === GRAMMAR.RULE.COMMENT &&
+      nodeBefore.text.replace(/^--(.*)$|^\/\*(.*)\*\/$/, "$1").trim() ===
+        "plsqlls: ignore"
+    ) {
+      return false;
+    }
+
     const symbol = getSymbol(node, context.symbols);
     if (
       symbol &&
