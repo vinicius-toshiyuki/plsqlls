@@ -4,7 +4,7 @@ import {
   DeclarationParams,
 } from "vscode-languageserver";
 import { ServerContext } from "@types";
-import { isReference, toDocumentPosition, toTreeSitterPosition } from "@util";
+import { toDocumentRange, toTreeSitterPosition } from "@util";
 import { getDeclaration } from "@providers/declaration";
 
 export function getOnDefinitionHandler(
@@ -22,11 +22,7 @@ export function getOnDefinitionHandler(
       toTreeSitterPosition(params.position),
     );
 
-    if (node && !isReference(node)) {
-      return null;
-    }
-
-    const declarationNode = getDeclaration(node);
+    const declarationNode = getDeclaration(node, context);
 
     if (!declarationNode) {
       return null;
@@ -34,10 +30,7 @@ export function getOnDefinitionHandler(
 
     const declaration: Declaration = {
       uri: params.textDocument.uri,
-      range: {
-        start: toDocumentPosition(declarationNode.startPosition),
-        end: toDocumentPosition(declarationNode.endPosition),
-      },
+      range: toDocumentRange(declarationNode),
     };
     return declaration;
   };

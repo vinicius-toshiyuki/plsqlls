@@ -6,15 +6,15 @@ import {
 import { ServerContext } from "../../types";
 import {
   getContainingScope,
-  getDeepestNodeAtPosition,
   getIdentifierKey,
   getSymbol,
   GRAMMAR,
-  isReference,
+  isBuiltinNode,
   isField,
   isScopeNode,
   toDocumentRange,
-  walkDepthFirst,
+  toTreeSitterPosition,
+  traverse,
 } from "@util";
 import { SyntaxNode } from "tree-sitter";
 
@@ -85,22 +85,19 @@ export function getOnDeclarationHandler(
       return null;
     }
 
-    const node = getDeepestNodeAtPosition(tree.rootNode, params.position);
-    const scope = getContainingScope(node);
+    const node = tree.rootNode.descendantForPosition(
+      toTreeSitterPosition(params.position),
+    );
 
-    if (!scope || !isReference(node)) {
-      return null;
-    }
+    const declarationNode = getDeclaration(node, context);
 
-    const symbol = getSymbol(node, context.symbols);
-
-    if (!symbol?.declaration) {
+    if (!declarationNode) {
       return null;
     }
 
     const declaration: Declaration = {
       uri: params.textDocument.uri,
-      range: toDocumentRange(symbol.declaration.node),
+      range: toDocumentRange(declarationNode),
     };
     return declaration;
   };
