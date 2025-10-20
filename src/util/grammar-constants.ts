@@ -5,6 +5,7 @@ export const GRAMMAR = {
         "INCLUDE_STATEMENT": "include_statement",
         "PACKAGE_BODY_STATEMENT": "package_body_statement",
         "BLOCK_STATEMENT": "block_statement",
+        "BLOCK_DECLARATION_LIST": "block_declaration_list",
         "BLOCK_BODY": "block_body",
         "_BLOCK_EXCEPTION": "_block_exception",
         "BLOCK_DECLARATION": "block_declaration",
