@@ -234,7 +234,7 @@ export function getContainingScope(node: SyntaxNode): SyntaxNode | null {
   }
 
   while (true) {
-    if (isScopeNode(currentNode) && currentNode.id !== node.id) {
+    if (currentNode !== node && isScopeNode(currentNode)) {
       return currentNode;
     }
 
