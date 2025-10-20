@@ -7,6 +7,7 @@ import { fmtKeyword } from "./keyword";
 import { fmtFunctionDefinition } from "./function-definition";
 import { fmtParamDeclarationList } from "./param-declaration-list";
 import { fmtBlockDeclarationList } from "./block-declaration-list";
+import { fmtIfStatement } from "./if-statement";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -32,6 +33,9 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.BLOCK_DECLARATION_LIST: {
       return fmtBlockDeclarationList(node, options);
+    }
+    case GRAMMAR.RULE.IF_STATEMENT: {
+      return fmtIfStatement(node, options);
     }
     default: {
       if (KEYWORD_NODE_TYPES.includes(node.type)) {
