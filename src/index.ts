@@ -38,6 +38,7 @@ import fs from "fs";
 import { URI } from "vscode-uri";
 import path from "path";
 import { getOnReferencesHandler } from "./providers/references";
+import { getOnHoverHandler } from "./providers/hover";
 
 const connection = createConnection(ProposedFeatures.all);
 
@@ -78,6 +79,7 @@ connection.onInitialize(() => {
         codeActionKinds: [CodeActionKind.QuickFix],
       },
       referencesProvider: true,
+      hoverProvider: true,
       // TODO
       // semanticTokensProvider: {
       //   legend: {
@@ -194,6 +196,7 @@ connection.onDocumentRangeFormatting(
 );
 connection.onDocumentFormatting(getOnDocumentFormattingHandler(context));
 connection.onReferences(getOnReferencesHandler(context));
+connection.onHover(getOnHoverHandler(context));
 
 context.documents.listen(connection);
 connection.listen();
