@@ -92,7 +92,7 @@ function getAddParameterDeclarationAction(
   const hasOtherParameters =
     previousSibling?.type === GRAMMAR.RULE.PARAM_DECLARATION_LIST;
   const programName = scope.childForFieldName(GRAMMAR.FIELD.PROGRAM_NAME)?.text;
-  const newText = `${hasOtherParameters ? ",\n" : ""}${identifierName} VARCHAR2(4000)\n`;
+  const newText = `${hasOtherParameters ? ",\n" : ""}${identifierName} VARCHAR2\n`;
 
   if (!insertBeforeNode || programName === undefined) {
     return null;
