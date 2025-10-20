@@ -227,9 +227,8 @@ export function getContainingScope(node: SyntaxNode): SyntaxNode | null {
   // If the node is a program name, the scope is the one above the program
   // scope
   if (
-    currentNode.parent?.childForFieldName(GRAMMAR.FIELD.PROGRAM_NAME)?.id ===
-      currentNode.id &&
-    currentNode.parent.parent
+    isField(currentNode, GRAMMAR.FIELD.PROGRAM_NAME) &&
+    currentNode.parent?.parent
   ) {
     currentNode = currentNode.parent.parent;
   }
@@ -246,13 +245,15 @@ export function getContainingScope(node: SyntaxNode): SyntaxNode | null {
   }
 }
 
+export function isField(node: SyntaxNode, fieldName: string): boolean {
+  return !!node.parent?.childrenForFieldName(fieldName).includes(node);
+}
+
 export function isReference(node: SyntaxNode): boolean {
   return (
-    node.parent?.childForFieldName(GRAMMAR.FIELD.DECLARATION_IDENTIFIER)?.id ===
-      node.id ||
-    node.parent?.childForFieldName(GRAMMAR.FIELD.ACCESSOR_IDENTIFIER)?.id ===
-      node.id ||
-    node.parent?.childForFieldName(GRAMMAR.FIELD.PROGRAM_NAME)?.id === node.id
+    isField(node, GRAMMAR.FIELD.DECLARATION_IDENTIFIER) ||
+    isField(node, GRAMMAR.FIELD.PROGRAM_NAME) ||
+    isField(node, GRAMMAR.FIELD.ACCESSOR_IDENTIFIER) ||
   );
 }
 
