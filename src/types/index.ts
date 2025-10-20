@@ -28,6 +28,7 @@ export type LanguageSymbol = {
   references: Reference[];
   declaration: Reference | null;
   definition: Reference | null;
+  scopeNodeId: number;
 };
 
 export type Scope = {
