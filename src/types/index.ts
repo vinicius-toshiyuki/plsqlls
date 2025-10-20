@@ -2,9 +2,7 @@ import { SyntaxNode, Tree } from "tree-sitter";
 import {
   createConnection,
   MessageType,
-  TextDocuments,
 } from "vscode-languageserver";
-import { TextDocument } from "vscode-languageserver-textdocument";
 
 export type DocumentTrees = { [uri: string]: Tree };
 
@@ -48,7 +46,6 @@ export type SymbolMap = {
 
 export type ServerContext = {
   trees: DocumentTrees;
-  documents: TextDocuments<TextDocument>;
   configs: {
     [uri: string]: ServerConfig;
   };

@@ -43,7 +43,6 @@ const connection = createConnection(ProposedFeatures.all);
 
 const parser = createParser();
 const context: ServerContext = {
-  documents: new TextDocuments(TextDocument),
   trees: {},
   configs: {},
   symbols: {
