@@ -90,7 +90,8 @@ export function walkBreadth(
   while (next.length) {
     const [node, depth] = next.shift() as (typeof next)[0];
 
-    const newDepth = node.type === "block_declaration" ? depth + 1 : depth;
+    const newDepth =
+      node.type === GRAMMAR.RULE.BLOCK_DECLARATION ? depth + 1 : depth;
 
     next.push(...node.children.map((child) => [child, newDepth] as const));
     const shouldStop = callback(node, depth);
