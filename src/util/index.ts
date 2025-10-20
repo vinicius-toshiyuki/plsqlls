@@ -285,8 +285,8 @@ export function getReferences(node: SyntaxNode): SyntaxNode[] {
 
 export function isExternalSymbol(config: ServerConfig, name: string): boolean {
   return (
-    !!config.external &&
-    config.external.every((symbol) =>
+    !!config.options.external &&
+    config.options.external.every((symbol) =>
       typeof symbol === "string"
         ? symbol.toLowerCase() !== name.toLowerCase()
         : symbol.name.toLowerCase() !== name.toLowerCase(),

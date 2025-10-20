@@ -5,14 +5,17 @@ import { TextDocument } from "vscode-languageserver-textdocument";
 export type DocumentTrees = { [uri: string]: Tree };
 
 export type ServerConfig = {
-  include?: string[];
-  external?: (
-    | string
-    | {
-        name: string;
-        docs?: string;
-      }
-  )[];
+  version: string;
+  options: {
+    include?: string[];
+    external?: (
+      | string
+      | {
+          name: string;
+          docs?: string;
+        }
+    )[];
+  };
 };
 
 export type Reference = {
