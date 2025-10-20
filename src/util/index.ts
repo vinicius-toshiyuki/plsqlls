@@ -263,6 +263,8 @@ export function isReference(node: SyntaxNode): boolean {
     isField(node, GRAMMAR.FIELD.DECLARATION_IDENTIFIER) ||
     isField(node, GRAMMAR.FIELD.PROGRAM_NAME) ||
     isField(node, GRAMMAR.FIELD.ACCESSOR_IDENTIFIER) ||
+    isField(node, GRAMMAR.FIELD.TABLE_NAME) ||
+    isField(node, GRAMMAR.FIELD.PACKAGE_IDENTIFIER)
   );
 }
 
