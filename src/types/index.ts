@@ -1,5 +1,9 @@
 import { SyntaxNode, Tree } from "tree-sitter";
-import { MessageType, TextDocuments } from "vscode-languageserver";
+import {
+  createConnection,
+  MessageType,
+  TextDocuments,
+} from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 
 export type DocumentTrees = { [uri: string]: Tree };
@@ -50,4 +54,5 @@ export type ServerContext = {
   };
   symbols: SymbolMap;
   sendMessage: (type: MessageType, message: string) => void;
+  console: ReturnType<typeof createConnection>["console"];
 };

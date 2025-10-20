@@ -56,6 +56,7 @@ const context: ServerContext = {
       message,
     });
   },
+  console: connection.console,
 };
 
 connection.onInitialize(() => {
