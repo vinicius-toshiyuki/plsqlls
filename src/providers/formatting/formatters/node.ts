@@ -1,0 +1,57 @@
+import { GRAMMAR, KEYWORD_NODE_TYPES } from "@util";
+import { SyntaxNode } from "tree-sitter";
+import { FormatOptions, FormatPart } from "@types";
+import { fmtOperator } from "./operator";
+import { textForLeafNode } from "./leaf-node";
+import { fmtKeyword } from "./keyword";
+import { fmtFunctionDefinition } from "./function-definition";
+import { fmtParamDeclarationList } from "./param-declaration-list";
+import { fmtBlockDeclarationList } from "./block-declaration-list";
+
+export function fmtNode(
+  node: SyntaxNode,
+  options: FormatOptions,
+): FormatPart[] {
+  switch (node.type) {
+    case GRAMMAR.RULE.BINARY_OPERATOR: {
+      return fmtOperator(node, options);
+    }
+    case GRAMMAR.RULE.SEMICOLON_PUNCTUATION: {
+      return [
+        {
+          text: textForLeafNode(node),
+          newLine: true,
+        },
+      ];
+    }
+    case GRAMMAR.RULE.FUNCTION_DEFINITION: {
+      return fmtFunctionDefinition(node, options);
+    }
+    case GRAMMAR.RULE.PARAM_DECLARATION_LIST: {
+      return fmtParamDeclarationList(node, options);
+    }
+    case GRAMMAR.RULE.BLOCK_DECLARATION_LIST: {
+      return fmtBlockDeclarationList(node, options);
+    }
+    default: {
+      if (KEYWORD_NODE_TYPES.includes(node.type)) {
+        return fmtKeyword(node, options);
+      }
+
+      if (node.children.length > 0) {
+        return node.children.flatMap((child) => fmtNode(child, options));
+      } else {
+        return [{ text: textForLeafNode(node) }];
+      }
+    }
+  }
+}
+
+export function fmtNode1(node: SyntaxNode, options: FormatOptions): FormatPart {
+  const parts = fmtNode(node, options);
+  if (parts.length !== 1) {
+    throw new Error("Expected a single part");
+  }
+
+  return parts[0];
+}

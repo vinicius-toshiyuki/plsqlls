@@ -17,8 +17,10 @@ import {
   walkBreadth,
 } from "@util";
 import { Query, QueryCapture, SyntaxNode, Tree } from "tree-sitter";
-import { ServerContext } from "@types";
+import { FormatOptions, ServerContext } from "@types";
 import PlSql from "@treesitter-parser/binding";
+import { fmtNode as formatNode } from "./formatters/node";
+import { buildParts } from "./formatters/util";
 
 const TEXT_WRAP_LENGTH = 120;
 
@@ -32,33 +34,38 @@ const UPPER_CASE_TYPES = [
   GRAMMAR.RULE.BUILTIN_TYPE,
   GRAMMAR.RULE.CONSTANT,
   GRAMMAR.RULE.BOOLEAN,
+  GRAMMAR.RULE.DUAL_BUILTIN,
   ...OPERATOR_NODE_TYPES,
   ...KEYWORD_NODE_TYPES,
 ];
 
 function fmtNode(node: SyntaxNode): string {
+  let newText: string;
   if (UPPER_CASE_TYPES.includes(node.type)) {
-    return node.text.toUpperCase();
+    newText = node.text.toUpperCase();
   } else if (node.type === GRAMMAR.RULE.UDT) {
-    return node.text.toLowerCase();
+    newText = node.text.toLowerCase();
   } else if (node.type === GRAMMAR.RULE.TYPE) {
     const typeQuery = new Query(PlSql, `[(builtin_type) (udt)] @type`);
     const [capture] = typeQuery.captures(node);
     if (capture.node.type === GRAMMAR.RULE.BUILTIN_TYPE) {
-      return capture.node.text.toUpperCase();
+      newText = capture.node.text.toUpperCase();
     } else {
-      return capture.node.text.toLowerCase();
+      newText = capture.node.text.toLowerCase();
     }
   } else if (node.type === GRAMMAR.RULE.IDENTIFIER) {
     if (node.previousSibling?.type === GRAMMAR.RULE.COLON_PUNCTUATION) {
-      return node.text.toUpperCase();
+      newText = node.text.toUpperCase();
     } else if (node.text.startsWith('"') && node.text.endsWith('"')) {
-      return node.text;
+      newText = node.text;
+    } else {
+      newText = node.text.toLowerCase();
     }
-    return node.text.toLowerCase();
   } else {
-    return node.text;
+    newText = node.text;
   }
+
+  return newText;
 }
 
 export function fmt(
@@ -497,7 +504,28 @@ export function getOnDocumentFormattingHandler(
       return [];
     }
 
-    const edits = formatFromGrammar(tree, params.options);
+    const options: FormatOptions = {
+      maxLength: TEXT_WRAP_LENGTH,
+      ...(params.options.insertSpaces
+        ? {
+            indentText: " ",
+            indentAmount: params.options.tabSize,
+          }
+        : {
+            indentText: "\t",
+            indentAmount: 1,
+          }),
+    };
+
+    const parts = formatNode(tree.rootNode, options);
+
+    const newText = buildParts(parts, options);
+
+    const edit: TextEdit = {
+      range: toDocumentRange(tree.rootNode),
+      newText,
+    };
+    const edits = [edit];
 
     return edits;
   };
