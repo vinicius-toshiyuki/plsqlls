@@ -217,6 +217,10 @@ export function getDeepestNodeAtPosition(
   return deepestNode;
 }
 
+export function isBuiltinNode(node: SyntaxNode): boolean {
+  return BUILTIN_NODE_TYPES.includes(node.type);
+}
+
 export function isScopeNode(node: SyntaxNode): boolean {
   return SCOPE_NODE_TYPES.includes(node.type);
 }
@@ -341,6 +345,10 @@ export function getScopeId(scope: SyntaxNode): number | "global" {
   return scope.type === GRAMMAR.RULE.SOURCE_FILE ? "global" : scope.id;
 }
 
+export function getGlobalScopeId(scope: SyntaxNode): number {
+  return scope.id;
+}
+
 export function getIdentifierKey(node: SyntaxNode): string {
   return node.text.toLowerCase();
 }
@@ -366,4 +374,55 @@ export function getSymbol(
   }
 
   return null;
+}
+
+export function getNodeBefore(node: SyntaxNode): SyntaxNode | null {
+  let currentNode = node;
+
+  while (currentNode.parent) {
+    if (currentNode.parent.startIndex < node.startIndex) {
+      return (
+        currentNode.previousSibling?.descendantForIndex(
+          currentNode.parent.endIndex,
+        ) ?? null
+      );
+    }
+    currentNode = currentNode.parent;
+  }
+
+  return null;
+}
+
+export function findCapture(
+  captures: QueryCapture[],
+  name: string,
+): QueryCapture | null {
+  return captures.find((capture) => capture.name === name) ?? null;
+}
+
+export function* traverse(node: SyntaxNode) {
+  const cursor = node.walk();
+
+  yield cursor.currentNode;
+
+  if (!cursor.gotoFirstChild()) {
+    return;
+  }
+
+  yield cursor.currentNode;
+
+  while (1) {
+    if (cursor.gotoFirstChild() || cursor.gotoNextSibling()) {
+      yield cursor.currentNode;
+      continue;
+    }
+
+    do {
+      if (!cursor.gotoParent() || cursor.currentNode.id === node.id) {
+        return;
+      }
+    } while (!cursor.gotoNextSibling());
+  }
+
+  return;
 }
