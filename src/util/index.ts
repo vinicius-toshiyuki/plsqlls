@@ -1,4 +1,9 @@
-import { Point, SyntaxNode, Range as TreeSitterRange } from "tree-sitter";
+import {
+  Point,
+  QueryCapture,
+  SyntaxNode,
+  Range as TreeSitterRange,
+} from "tree-sitter";
 import { Range as DocumentRange, Position } from "vscode-languageserver";
 import { getDeclaration } from "@providers/declaration";
 import { LanguageSymbol, ServerConfig, SymbolMap } from "@types";
@@ -363,12 +368,18 @@ export function getSymbol(
   const identifierKey = getIdentifierKey(node);
   let scopeNode = getContainingScope(node);
 
+  let symbol: LanguageSymbol | null = null;
   while (scopeNode) {
     const scopeId = getScopeId(scopeNode);
     const scope =
       scopeId === "global" ? symbols.global : symbols.scopes[scopeId];
-    if (identifierKey in scope) {
-      return scope[identifierKey];
+    if (scope && identifierKey in scope) {
+      if (!symbol || scope[identifierKey].declaration) {
+        symbol = scope[identifierKey];
+      }
+      if (symbol.declaration) {
+        return symbol;
+      }
     }
     scopeNode = getContainingScope(scopeNode);
   }
