@@ -11,6 +11,7 @@ import {
   getSymbol,
   GRAMMAR,
   isReference,
+  isField,
   isScopeNode,
   toDocumentRange,
   walkDepthFirst,
@@ -39,24 +40,13 @@ export function getDeclaration(
         const programNameNode = currentNode.childForFieldName(
           GRAMMAR.FIELD.PROGRAM_NAME,
         );
-        const isDifferentScope = node !== scope && isScopeNode(node);
-
-        if (isDifferentScope && !programNameNode) {
-          return true;
-        }
-
-        let candidate =
-          node.childForFieldName(GRAMMAR.FIELD.DECLARATION_IDENTIFIER) ??
-          programNameNode;
-
-        const tableNameNode = node.parent
-          ?.childrenForFieldName(GRAMMAR.FIELD.TABLE_NAME)
-          .find(({ id }) => id === node.id);
-        if (tableNameNode && !candidate) {
-          candidate ??=
-            node.parent
-              ?.childrenForFieldName(GRAMMAR.FIELD.TABLE_ALIAS)
-              ?.find(({ id }) => id === tableNameNode.nextSibling?.id) ?? null;
+        let candidate: SyntaxNode | undefined;
+        if (isField(currentNode, GRAMMAR.FIELD.DECLARATION_IDENTIFIER)) {
+          candidate = currentNode;
+        } else if (programNameNode) {
+          candidate = programNameNode;
+        } else if (isField(currentNode, GRAMMAR.FIELD.TABLE_ALIAS)) {
+          candidate = currentNode;
         }
 
         if (candidate && getIdentifierKey(candidate) === identifierKey) {
