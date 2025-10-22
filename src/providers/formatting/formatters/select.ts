@@ -100,7 +100,7 @@ export function fmtSelect(
             text: textForLeafNode(child),
             spaceAfter: true,
             widthMatching: { namespace, group },
-            newLineBefore: true,
+            newLineBefore: child.type !== GRAMMAR.RULE.SELECT_KEYWORD,
           },
         ];
       }
