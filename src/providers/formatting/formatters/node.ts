@@ -11,6 +11,7 @@ import { fmtSelect } from "./select";
 import { fmtChainAccessor } from "./chain-accessor";
 import { fmtChainExpression } from "./chain-expression";
 import { fmtStatement } from "./statement";
+import { fmtCallExpression } from "./call-expression";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -35,7 +36,7 @@ export function fmtNode(
       return fmtBlockDeclarationList(node, options);
     }
     case GRAMMAR.RULE.STATEMENT: {
-        return fmtStatement(node, options);
+      return fmtStatement(node, options);
     }
     case GRAMMAR.RULE.IF_STATEMENT: {
       return fmtIfStatement(node, options);
@@ -48,6 +49,9 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.CHAIN_EXPRESSION: {
       return fmtChainExpression(node, options);
+    }
+    case GRAMMAR.RULE.CALL_EXPRESSION: {
+      return fmtCallExpression(node, options);
     }
     default: {
       if (KEYWORD_NODE_TYPES.includes(node.type)) {
