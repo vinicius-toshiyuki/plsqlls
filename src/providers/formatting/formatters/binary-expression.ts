@@ -1,11 +1,10 @@
-import { FormatPart } from "@types";
+import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "./node";
-import { FormattingOptions } from "vscode-languageserver";
 
 export function fmtBinaryExpression(
   node: SyntaxNode,
-  options: FormattingOptions,
+  options: FormatOptions,
 ): FormatPart[] {
   const [exp1, op, exp2] = node.children;
 
