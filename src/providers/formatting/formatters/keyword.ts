@@ -3,10 +3,7 @@ import { GRAMMAR } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { textForLeafNode } from "./leaf-node";
 
-export function fmtKeyword(
-  node: SyntaxNode,
-  _: FormatOptions,
-): FormatPart[] {
+export function fmtKeyword(node: SyntaxNode, _: FormatOptions): FormatPart[] {
   switch (node.type) {
     // Space rules
     case GRAMMAR.RULE.FUNCTION_KEYWORD:
@@ -14,6 +11,7 @@ export function fmtKeyword(
       return [
         {
           text: textForLeafNode(node),
+          spaceAfter: true,
         },
       ];
     }
@@ -33,6 +31,7 @@ export function fmtKeyword(
       return [
         {
           text: textForLeafNode(node),
+          spaceAfter: true,
         },
       ];
     }

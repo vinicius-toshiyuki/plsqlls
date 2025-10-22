@@ -49,7 +49,7 @@ export function fmtNode(
       if (node.children.length > 0) {
         return node.children.flatMap((child) => fmtNode(child, options));
       } else {
-        return [{ text: textForLeafNode(node) }];
+        return [{ text: textForLeafNode(node), spaceAfter: true }];
       }
     }
   }
