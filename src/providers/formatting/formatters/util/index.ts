@@ -79,12 +79,15 @@ export function buildParts(
       return processedPart;
     })
     .map((part) => {
+      const prefix = "\n".repeat(part.ctx.skipLines ?? 0);
+
       if (
         part.ctx.break &&
         !part.ctx.newLine &&
         lines[part.lineIndex].text.length > options.maxLength
       ) {
         return (
+          prefix +
           part.text.trimEnd() +
           "\n" +
           options.indentText.repeat(
@@ -95,7 +98,7 @@ export function buildParts(
           )
         );
       }
-      return part.text;
+      return prefix + part.text;
     })
     .join("");
 

@@ -58,6 +58,7 @@ export type FormatPart = {
   indentAfter?: number;
   spaceAfter?: boolean;
   break?: boolean | { indentAfter?: number };
+  skipLines?: number;
   widthMatching?: {
     namespace: string;
     group: string;

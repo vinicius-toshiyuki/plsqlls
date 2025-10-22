@@ -11,6 +11,7 @@ import { fmtIfStatement } from "./if-statement";
 import { fmtSelect } from "./select";
 import { fmtChainAccessor } from "./chain-accessor";
 import { fmtChainExpression } from "./chain-expression";
+import { fmtStatement } from "./statement";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -36,6 +37,9 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.BLOCK_DECLARATION_LIST: {
       return fmtBlockDeclarationList(node, options);
+    }
+    case GRAMMAR.RULE.STATEMENT: {
+        return fmtStatement(node, options);
     }
     case GRAMMAR.RULE.IF_STATEMENT: {
       return fmtIfStatement(node, options);
