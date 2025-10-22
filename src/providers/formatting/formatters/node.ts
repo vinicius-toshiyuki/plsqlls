@@ -1,7 +1,6 @@
 import { GRAMMAR, KEYWORD_NODE_TYPES } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { FormatOptions, FormatPart } from "@types";
-import { fmtOperator } from "./operator";
 import { textForLeafNode } from "./leaf-node";
 import { fmtKeyword } from "./keyword";
 import { fmtFunctionDefinition } from "./function-definition";
@@ -18,9 +17,6 @@ export function fmtNode(
   options: FormatOptions,
 ): FormatPart[] {
   switch (node.type) {
-    case GRAMMAR.RULE.BINARY_OPERATOR: {
-      return fmtOperator(node, options);
-    }
     case GRAMMAR.RULE.SEMICOLON_PUNCTUATION: {
       return [
         {
