@@ -86,15 +86,23 @@ export function buildParts(
         !part.ctx.newLine &&
         lines[part.lineIndex].text.length > options.maxLength
       ) {
+        let indent = options.indentAmount;
+
+        if (typeof part.ctx.break === "object") {
+          if (typeof part.ctx.break.indentAfter === "number") {
+            indent = part.ctx.break.indentAfter;
+          } else if (typeof part.ctx.break.indentAfter === "object") {
+            const { namespace, group } = part.ctx.break.indentAfter;
+            indent = matchGroups.get(namespace)?.get(group) ?? indent;
+          }
+        }
+
         return (
           prefix +
           part.text.trimEnd() +
           "\n" +
           options.indentText.repeat(
-            lines[part.lineIndex].indent +
-              (typeof part.ctx.break === "object"
-                ? (part.ctx.break.indentAfter ?? options.indentAmount)
-                : options.indentAmount),
+            Math.max(0, lines[part.lineIndex].indent + indent),
           )
         );
       }

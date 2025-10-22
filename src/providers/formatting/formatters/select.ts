@@ -1,4 +1,4 @@
-import { FormatOptions, FormatPart } from "@types";
+import { FormatOptions, FormatPart, FormatPartWidthMatching } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 import { GRAMMAR } from "@util";
@@ -27,9 +27,8 @@ function fmtSelectColumn(
 function fmtSelectTables(
   node: SyntaxNode,
   options: FormatOptions,
+  widthMatching: FormatPartWidthMatching,
 ): FormatPart[] {
-  const indentAmount = getIndentAmount(options);
-
   const insertNewLine = (node: SyntaxNode, parts: FormatPart[]) => {
     assertAtLeastOnePart(parts);
 
@@ -46,8 +45,9 @@ function fmtSelectTables(
       case GRAMMAR.RULE.FROM_KEYWORD:
       case GRAMMAR.RULE.JOIN_KEYWORD: {
         return {
-          text: textForLeafNode(child).padEnd(indentAmount - 1),
+          text: textForLeafNode(child),
           spaceAfter: true,
+          widthMatching,
         };
       }
       default: {
@@ -59,34 +59,19 @@ function fmtSelectTables(
   });
 }
 
-function getIndentAmount(options: FormatOptions): number {
-  return options.indentText === " "
-    ? "SELECT".length + 1
-    : options.indentAmount;
-}
-
 function alignWithSelect(
   node: SyntaxNode,
   parts: FormatPart[],
-  options: FormatOptions,
+  _: FormatOptions,
   beforeFirstNodeType: string,
+  widthMatching: FormatPartWidthMatching,
 ): void {
-  const indentAmount = getIndentAmount(options);
-
   assertAtLeastOnePart(parts);
 
   const firstPart = parts[0];
   const isFirstColumn = node.previousSibling?.type === beforeFirstNodeType;
   if (isFirstColumn) {
-    firstPart.indentAfter = indentAmount;
-  }
-
-  const lastPart = parts[parts.length - 1];
-  const isLastColumn =
-    node.nextSibling?.type !== GRAMMAR.RULE.COMMA_PUNCTUATION;
-  if (isLastColumn) {
-    lastPart.newLine = true;
-    lastPart.indentAfter = -indentAmount;
+    firstPart.break = { indentAfter: widthMatching };
   }
 }
 
@@ -94,7 +79,8 @@ export function fmtSelect(
   node: SyntaxNode,
   options: FormatOptions,
 ): FormatPart[] {
-  const indentAmount = getIndentAmount(options);
+  const namespace = node.id.toFixed(0);
+  const group = "select";
 
   return node.children.flatMap((child) => {
     switch (child.type) {
@@ -102,22 +88,32 @@ export function fmtSelect(
         const parts = fmtSelectColumn(child, options);
 
         assertAtLeastOnePart(parts);
-        alignWithSelect(child, parts, options, GRAMMAR.RULE.SELECT_KEYWORD);
+        alignWithSelect(child, parts, options, GRAMMAR.RULE.SELECT_KEYWORD, {
+          namespace,
+          group,
+        });
 
         return parts;
       }
+      case GRAMMAR.RULE.SELECT_KEYWORD:
       case GRAMMAR.RULE.INTO_KEYWORD:
       case GRAMMAR.RULE.WHERE_KEYWORD: {
-        return {
-          text: textForLeafNode(child).padEnd(indentAmount - 1),
-          spaceAfter: true,
-        };
+        return [
+          {
+            text: textForLeafNode(child),
+            spaceAfter: true,
+            widthMatching: { namespace, group },
+          },
+        ];
       }
       case GRAMMAR.RULE.CHAIN_ACCESSOR: {
         const parts = fmtNode(child, options);
 
         assertAtLeastOnePart(parts);
-        alignWithSelect(child, parts, options, GRAMMAR.RULE.INTO_KEYWORD);
+        alignWithSelect(child, parts, options, GRAMMAR.RULE.INTO_KEYWORD, {
+          namespace,
+          group,
+        });
 
         parts[parts.length - 1].spaceAfter = false;
 
@@ -128,12 +124,12 @@ export function fmtSelect(
           {
             text: textForLeafNode(child),
             spaceAfter: true,
-            break: { indentAfter: indentAmount },
+            break: { indentAfter: { namespace, group } },
           },
         ];
       }
       case GRAMMAR.RULE.SELECT_TABLES: {
-        return fmtSelectTables(child, options);
+        return fmtSelectTables(child, options, { namespace, group });
       }
       default: {
         return fmtNode(child, options);

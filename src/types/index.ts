@@ -51,18 +51,20 @@ export type ServerContext = {
   console: ReturnType<typeof createConnection>["console"];
 };
 
+export type FormatPartWidthMatching = {
+  namespace: string;
+  group: string;
+};
+
 export type FormatPart = {
   text: string;
   newLine?: boolean;
   indent?: number;
   indentAfter?: number;
   spaceAfter?: boolean;
-  break?: boolean | { indentAfter?: number };
+  break?: boolean | { indentAfter?: number | FormatPartWidthMatching };
   skipLines?: number;
-  widthMatching?: {
-    namespace: string;
-    group: string;
-  };
+  widthMatching?: FormatPartWidthMatching;
 };
 
 export type FormatOptions = {
