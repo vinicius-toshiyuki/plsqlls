@@ -59,6 +59,7 @@ export type FormatPartWidthMatching = {
 export type FormatPart = {
   text: string;
   newLine?: boolean;
+  newLineBefore?: boolean;
   indent?: number;
   indentAfter?: number;
   spaceAfter?: boolean;

@@ -29,17 +29,6 @@ function fmtSelectTables(
   options: FormatOptions,
   widthMatching: FormatPartWidthMatching,
 ): FormatPart[] {
-  const insertNewLine = (node: SyntaxNode, parts: FormatPart[]) => {
-    assertAtLeastOnePart(parts);
-
-    const lastPart = parts[parts.length - 1];
-    const isTableLastNode =
-      node.nextSibling?.type === GRAMMAR.RULE.JOIN_KEYWORD;
-    if (isTableLastNode) {
-      lastPart.newLine = true;
-    }
-  };
-
   return node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.FROM_KEYWORD:
@@ -48,12 +37,11 @@ function fmtSelectTables(
           text: textForLeafNode(child),
           spaceAfter: true,
           widthMatching,
+          newLineBefore: true,
         };
       }
       default: {
-        const parts = fmtNode(child, options);
-        insertNewLine(child, parts);
-        return parts;
+        return fmtNode(child, options);
       }
     }
   });
@@ -103,6 +91,7 @@ export function fmtSelect(
             text: textForLeafNode(child),
             spaceAfter: true,
             widthMatching: { namespace, group },
+            newLineBefore: true,
           },
         ];
       }
