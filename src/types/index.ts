@@ -66,6 +66,6 @@ export type FormatPart = {
 
 export type FormatOptions = {
   indentAmount: number;
-  indentText: string;
+  indentText: " " | "\t";
   maxLength: number;
 };
