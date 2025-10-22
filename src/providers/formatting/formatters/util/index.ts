@@ -46,8 +46,8 @@ export function buildParts(
       let text = "";
       if (wasNewLine) {
         indent += part.indent ?? 0;
-        text += options.indentText.repeat(indent);
-        lines[lineIndex].indent = indent;
+        text += options.indentText.repeat(Math.max(0, indent));
+        lines[lineIndex].indent = Math.max(0, indent);
       }
       indent += part.indentAfter ?? 0;
       wasNewLine = !!part.newLine;
