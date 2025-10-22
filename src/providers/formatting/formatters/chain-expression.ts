@@ -12,15 +12,17 @@ export function fmtChainExpression(
   return node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.EXPRESSION: {
-          const parts = fmtNode(child, options);
+        const parts = fmtNode(child, options);
 
-          assertAtLeastOnePart(parts);
-          parts[parts.length - 1].spaceAfter = false;
+        assertAtLeastOnePart(parts);
+        parts[parts.length - 1].spaceAfter = false;
 
-          return parts;
+        return parts;
       }
       case GRAMMAR.RULE.IDENTIFIER: {
-        return [{ ...fmtNode1(child, options), spaceAfter: false }];
+        return [
+          { ...fmtNode1(child, options), spaceAfter: !child.nextSibling },
+        ];
       }
       case GRAMMAR.RULE.PERIOD_PUNCTUATION: {
         return [{ text: textForLeafNode(child) }];

@@ -11,6 +11,15 @@ function fmtSelectColumn(
 ): FormatPart[] {
   return node.children.flatMap((child) => {
     switch (child.type) {
+      case GRAMMAR.RULE.EXPRESSION: {
+        const parts = fmtNode(child, options);
+        assertAtLeastOnePart(parts);
+
+        if (!child.nextSibling) {
+          parts[parts.length - 1].spaceAfter = false;
+        }
+        return parts;
+      }
       case GRAMMAR.RULE.AS_KEYWORD: {
         return [{ text: textForLeafNode(child), spaceAfter: true }];
       }
