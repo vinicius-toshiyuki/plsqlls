@@ -18,6 +18,7 @@ import {
   getOnPrepareRenameHandler,
   getOnRenameRequestHandler,
 } from "@providers/rename";
+import { getOnDeclarationHandler } from "@providers/declaration";
 import { ServerContext } from "./types";
 import { getOnCodeActionHandler } from "@providers/code-actions";
 import { getOnDefinitionHandler } from "@providers/definition";
