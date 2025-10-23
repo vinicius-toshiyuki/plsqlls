@@ -4,14 +4,13 @@ exports.getOnPrepareRenameHandler = getOnPrepareRenameHandler;
 exports.getOnRenameRequestHandler = getOnRenameRequestHandler;
 const _util_1 = require("../../util/index.js");
 function getRenameEdits(symbol, newIdentifier) {
-    var _a, _b, _c, _d, _e, _f;
     const edits = {
         changes: {},
     };
     const viewdRefs = [];
     if (symbol.declaration) {
         viewdRefs.push(symbol.declaration.node.id);
-        (_a = edits.changes)[_b = symbol.declaration.uri] ?? (_a[_b] = []);
+        edits.changes[symbol.declaration.uri] ??= [];
         edits.changes[symbol.declaration.uri].push({
             newText: newIdentifier,
             range: (0, _util_1.toDocumentRange)(symbol.declaration.node),
@@ -19,7 +18,7 @@ function getRenameEdits(symbol, newIdentifier) {
     }
     if (symbol.definition && !viewdRefs.includes(symbol.definition.node.id)) {
         viewdRefs.push(symbol.definition.node.id);
-        (_c = edits.changes)[_d = symbol.definition.uri] ?? (_c[_d] = []);
+        edits.changes[symbol.definition.uri] ??= [];
         edits.changes[symbol.definition.uri].push({
             newText: newIdentifier,
             range: (0, _util_1.toDocumentRange)(symbol.definition.node),
@@ -30,7 +29,7 @@ function getRenameEdits(symbol, newIdentifier) {
             continue;
         }
         viewdRefs.push(ref.node.id);
-        (_e = edits.changes)[_f = ref.uri] ?? (_e[_f] = []);
+        edits.changes[ref.uri] ??= [];
         edits.changes[ref.uri].push({
             newText: newIdentifier,
             range: (0, _util_1.toDocumentRange)(ref.node),

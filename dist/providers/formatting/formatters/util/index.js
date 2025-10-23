@@ -1,0 +1,113 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.buildParts = buildParts;
+exports.spaceAfterPart = spaceAfterPart;
+const node_1 = require("../node");
+const _util_1 = require("../../../../util/index.js");
+function buildParts(parts, options, range) {
+    let indent = 0;
+    let wasNewLine = false;
+    let lineIndex = 0;
+    const matchGroups = new Map();
+    const lines = [{ text: "", indent: 0 }];
+    parts.forEach((part) => {
+        if (part.widthMatching) {
+            if (!matchGroups.has(part.widthMatching.namespace)) {
+                matchGroups.set(part.widthMatching.namespace, new Map());
+            }
+            const namespace = matchGroups.get(part.widthMatching.namespace);
+            if (!namespace.has(part.widthMatching.group)) {
+                namespace.set(part.widthMatching.group, part.text.length);
+            }
+            else {
+                const width = namespace.get(part.widthMatching.group);
+                namespace.set(part.widthMatching.group, Math.max(width, part.text.length));
+            }
+        }
+    });
+    const text = parts
+        .map((part) => {
+        if (part.widthMatching) {
+            const width = matchGroups
+                .get(part.widthMatching.namespace)
+                ?.get(part.widthMatching.group) ?? 0;
+            part.text = part.text.padEnd(width);
+        }
+        let text = "";
+        if (part.newLineBefore) {
+            wasNewLine = true;
+            text += "\n";
+            lineIndex++;
+            lines[lineIndex] = { text: "", indent };
+        }
+        if (wasNewLine) {
+            indent += part.indent ?? 0;
+            text += options.indentText.repeat(Math.max(0, indent));
+            lines[lineIndex].indent = Math.max(0, indent);
+        }
+        indent += part.indentAfter ?? 0;
+        wasNewLine = !!part.newLine;
+        text += part.text;
+        if (part.newLine) {
+            text += "\n";
+        }
+        else if (part.spaceAfter) {
+            text += " ";
+        }
+        const processedPart = {
+            text,
+            lineIndex,
+            ctx: part,
+        };
+        lines[lineIndex].text += text;
+        if (part.newLine) {
+            lineIndex++;
+            lines[lineIndex] = { text: "", indent };
+        }
+        return processedPart;
+    })
+        .map((part) => {
+        if (range && !(0, _util_1.isRangeContained)(part.ctx.range, range)) {
+            return "";
+        }
+        const prefix = "\n".repeat(part.ctx.skipLines ?? 0);
+        if (part.ctx.break &&
+            !part.ctx.newLine &&
+            lines[part.lineIndex].text.length > options.maxLength) {
+            let indent = options.indentAmount;
+            if (typeof part.ctx.break === "object") {
+                if (typeof part.ctx.break.indentAfter === "number") {
+                    indent = part.ctx.break.indentAfter;
+                }
+                else if (typeof part.ctx.break.indentAfter === "object") {
+                    const { namespace, group } = part.ctx.break.indentAfter;
+                    indent = matchGroups.get(namespace)?.get(group) ?? indent;
+                }
+            }
+            return (prefix +
+                part.text.trimEnd() +
+                "\n" +
+                options.indentText.repeat(Math.max(0, lines[part.lineIndex].indent + indent)));
+        }
+        return prefix + part.text;
+    })
+        .join("");
+    if (range) {
+        const lines = text.split("\n");
+        const firstLineIndex = lines.findIndex((line) => line.trim().length > 0);
+        const lastLineIndex = lines.findLastIndex((line) => line.trim().length > 0);
+        if (firstLineIndex >= 0 && lastLineIndex >= 0) {
+            return lines.slice(firstLineIndex, lastLineIndex + 1).join("\n");
+        }
+    }
+    return text;
+}
+function spaceAfterPart(node, options) {
+    const part = (0, node_1.fmtNode)(node, options);
+    if (part.length !== 1) {
+        throw new Error("Expected only a single part");
+    }
+    part[0].spaceAfter = true;
+    return part[0];
+}
+//# sourceMappingURL=index.js.map

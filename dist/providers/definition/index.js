@@ -10,19 +10,13 @@ function getOnDefinitionHandler(context) {
             return null;
         }
         const node = tree.rootNode.descendantForPosition((0, _util_1.toTreeSitterPosition)(params.position));
-        if (node && !(0, _util_1.isReference)(node)) {
-            return null;
-        }
-        const declarationNode = (0, declaration_1.getDeclaration)(node);
+        const declarationNode = (0, declaration_1.getDeclaration)(node, context);
         if (!declarationNode) {
             return null;
         }
         const declaration = {
             uri: params.textDocument.uri,
-            range: {
-                start: (0, _util_1.toDocumentPosition)(declarationNode.startPosition),
-                end: (0, _util_1.toDocumentPosition)(declarationNode.endPosition),
-            },
+            range: (0, _util_1.toDocumentRange)(declarationNode),
         };
         return declaration;
     };

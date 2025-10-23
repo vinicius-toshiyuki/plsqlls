@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOnCompletionHandler = getOnCompletionHandler;
+const binding_1 = __importDefault(require("../../treesitter-parser/binding.js"));
 const _util_1 = require("../../util/index.js");
 const tree_sitter_1 = require("tree-sitter");
 const vscode_languageserver_1 = require("vscode-languageserver");
-const binding_1 = __importDefault(require("../../treesitter-parser/binding.js"));
 function getIndetifierCompletions(node) {
     const items = {};
     (0, _util_1.walkBreadth)(node, (currentNode) => {
@@ -53,7 +53,7 @@ function getOnCompletionHandler(context) {
             return [];
         }
         const identifierItems = getIndetifierCompletions(tree.rootNode);
-        const currentNode = (0, _util_1.getDeepestNodeAtPosition)(tree.rootNode, params.position);
+        const currentNode = tree.rootNode.descendantForPosition((0, _util_1.toTreeSitterPosition)(params.position));
         const keywordItems = getKeywordCompletions(currentNode);
         return {
             isIncomplete: true,

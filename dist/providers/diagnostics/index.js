@@ -29,7 +29,8 @@ function getSyntaxDiagnostics(tree) {
 function getUndefinedDiagnostics(tree, context, config) {
     const diagnostics = [];
     (0, _util_1.walkBreadth)(tree.rootNode, (node) => {
-        if ((0, _util_1.isReference)(node) &&
+        if (!_util_1.BUILTIN_NODE_TYPES.includes(node.type) &&
+            (0, _util_1.isReference)(node) &&
             node.previousSibling?.type !== _util_1.GRAMMAR.RULE.COLON_PUNCTUATION &&
             (0, declaration_1.getDeclaration)(node, context) === null &&
             (!config || (0, util_1.isExternalSymbol)(config, node.text))) {
@@ -49,6 +50,12 @@ function getUndefinedDiagnostics(tree, context, config) {
 function getUnusedDiagnostics(tree, context) {
     const diagnostics = [];
     (0, _util_1.walkBreadth)(tree.rootNode, (node) => {
+        const nodeBefore = (0, _util_1.getNodeBefore)(node);
+        if (nodeBefore?.type === _util_1.GRAMMAR.RULE.COMMENT &&
+            nodeBefore.text.replace(/^--(.*)$|^\/\*(.*)\*\/$/, "$1").trim() ===
+                "plsqlls: ignore") {
+            return false;
+        }
         const symbol = (0, _util_1.getSymbol)(node, context.symbols);
         if (symbol &&
             node.previousSibling?.type !== _util_1.GRAMMAR.RULE.COLON_PUNCTUATION &&
