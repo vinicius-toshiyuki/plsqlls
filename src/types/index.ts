@@ -1,5 +1,5 @@
 import { SyntaxNode, Tree } from "tree-sitter";
-import { createConnection, MessageType } from "vscode-languageserver";
+import { createConnection, MessageType, Range } from "vscode-languageserver";
 
 export type DocumentTrees = { [uri: string]: Tree };
 
@@ -66,6 +66,7 @@ export type FormatPart = {
   break?: boolean | { indentAfter?: number | FormatPartWidthMatching };
   skipLines?: number;
   widthMatching?: FormatPartWidthMatching;
+  range: Range;
 };
 
 export type FormatOptions = {

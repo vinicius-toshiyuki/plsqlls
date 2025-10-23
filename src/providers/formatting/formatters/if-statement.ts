@@ -1,7 +1,7 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "./node";
-import { GRAMMAR } from "@util";
+import { GRAMMAR, toDocumentRange } from "@util";
 import { spaceAfterPart } from "./util";
 import { textForLeafNode } from "./leaf-node";
 
@@ -26,6 +26,7 @@ export function fmtIfStatement(
             text: textForLeafNode(child),
             newLine: true,
             indentAfter: options.indentAmount,
+            range: toDocumentRange(child),
           },
         ];
       }
@@ -34,6 +35,7 @@ export function fmtIfStatement(
           {
             text: textForLeafNode(child),
             indent: -options.indentAmount,
+            range: toDocumentRange(child),
           },
         ];
       }

@@ -1,4 +1,4 @@
-import { GRAMMAR, KEYWORD_NODE_TYPES } from "@util";
+import { GRAMMAR, KEYWORD_NODE_TYPES, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { FormatOptions, FormatPart } from "@types";
 import { textForLeafNode } from "./leaf-node";
@@ -23,6 +23,7 @@ export function fmtNode(
         {
           text: textForLeafNode(node),
           newLine: true,
+          range: toDocumentRange(node),
         },
       ];
     }
@@ -61,7 +62,13 @@ export function fmtNode(
       if (node.children.length > 0) {
         return node.children.flatMap((child) => fmtNode(child, options));
       } else {
-        return [{ text: textForLeafNode(node), spaceAfter: true }];
+        return [
+          {
+            text: textForLeafNode(node),
+            spaceAfter: true,
+            range: toDocumentRange(node),
+          },
+        ];
       }
     }
   }

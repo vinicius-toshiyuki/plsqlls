@@ -1,5 +1,5 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR } from "@util";
+import { GRAMMAR, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { textForLeafNode } from "./leaf-node";
 
@@ -12,6 +12,7 @@ export function fmtKeyword(node: SyntaxNode, _: FormatOptions): FormatPart[] {
         {
           text: textForLeafNode(node),
           spaceAfter: true,
+          range: toDocumentRange(node),
         },
       ];
     }
@@ -24,6 +25,7 @@ export function fmtKeyword(node: SyntaxNode, _: FormatOptions): FormatPart[] {
         {
           text: textForLeafNode(node),
           newLine: true,
+          range: toDocumentRange(node),
         },
       ];
     }
@@ -32,6 +34,7 @@ export function fmtKeyword(node: SyntaxNode, _: FormatOptions): FormatPart[] {
         {
           text: textForLeafNode(node),
           spaceAfter: true,
+          range: toDocumentRange(node),
         },
       ];
     }

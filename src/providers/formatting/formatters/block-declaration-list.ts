@@ -1,5 +1,5 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR } from "@util";
+import { GRAMMAR, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 import { textForLeafNode } from "./leaf-node";
@@ -20,7 +20,7 @@ function fmtBlockDeclaration(
               group: "identifier",
             },
           },
-          { text: " " },
+          { text: " ", range: toDocumentRange(child) },
         ];
       }
       case GRAMMAR.RULE.SEMICOLON_PUNCTUATION: {
@@ -28,6 +28,7 @@ function fmtBlockDeclaration(
           {
             text: textForLeafNode(child),
             newLine: true,
+            range: toDocumentRange(child),
           },
         ];
       }

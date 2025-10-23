@@ -1,5 +1,5 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR } from "@util";
+import { GRAMMAR, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { spaceAfterPart } from "./util";
 import { fmtNode, fmtNode1 } from "./node";
@@ -29,6 +29,7 @@ export function fmtFunctionDefinition(
           {
             text: textForLeafNode(child),
             break: true,
+            range: toDocumentRange(child),
           },
         ];
       case GRAMMAR.RULE.IS_KEYWORD:
@@ -37,6 +38,7 @@ export function fmtFunctionDefinition(
             text: textForLeafNode(child),
             indentAfter: options.indentAmount,
             newLine: true,
+            range: toDocumentRange(child),
           },
         ];
       case GRAMMAR.RULE.BEGIN_KEYWORD:
@@ -46,6 +48,7 @@ export function fmtFunctionDefinition(
             indentAfter: options.indentAmount,
             text: textForLeafNode(child),
             newLine: true,
+            range: toDocumentRange(child),
           },
         ];
       case GRAMMAR.RULE.END_KEYWORD:
@@ -53,6 +56,7 @@ export function fmtFunctionDefinition(
           {
             indent: -options.indentAmount,
             text: textForLeafNode(child),
+            range: toDocumentRange(child),
           },
         ];
       default: {

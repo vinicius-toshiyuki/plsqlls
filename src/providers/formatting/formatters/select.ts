@@ -1,7 +1,7 @@
 import { FormatOptions, FormatPart, FormatPartWidthMatching } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
-import { GRAMMAR } from "@util";
+import { GRAMMAR, toDocumentRange } from "@util";
 import { textForLeafNode } from "./leaf-node";
 import { assertAtLeastOnePart } from "./util/asserts";
 
@@ -21,7 +21,13 @@ function fmtSelectColumn(
         return parts;
       }
       case GRAMMAR.RULE.AS_KEYWORD: {
-        return [{ text: textForLeafNode(child), spaceAfter: true }];
+        return [
+          {
+            text: textForLeafNode(child),
+            spaceAfter: true,
+            range: toDocumentRange(child),
+          },
+        ];
       }
       case GRAMMAR.RULE.IDENTIFIER: {
         return [{ ...fmtNode1(child, options), spaceAfter: false }];
@@ -47,6 +53,7 @@ function fmtSelectTables(
           spaceAfter: true,
           widthMatching,
           newLineBefore: true,
+          range: toDocumentRange(child),
         };
       }
       default: {
@@ -101,6 +108,7 @@ export function fmtSelect(
             spaceAfter: true,
             widthMatching: { namespace, group },
             newLineBefore: child.type !== GRAMMAR.RULE.SELECT_KEYWORD,
+            range: toDocumentRange(child),
           },
         ];
       }
@@ -123,6 +131,7 @@ export function fmtSelect(
             text: textForLeafNode(child),
             spaceAfter: true,
             break: { indentAfter: { namespace, group } },
+            range: toDocumentRange(child),
           },
         ];
       }
