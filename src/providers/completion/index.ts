@@ -1,5 +1,6 @@
+import PlSql from "@treesitter-parser/binding";
 import { ServerContext } from "@types";
-import { getDeepestNodeAtPosition, GRAMMAR, walkBreadth } from "@util";
+import { GRAMMAR, toTreeSitterPosition, walkBreadth } from "@util";
 import { LookaheadIterator, SyntaxNode } from "tree-sitter";
 import {
   CompletionItem,
@@ -7,7 +8,6 @@ import {
   CompletionList,
   CompletionParams,
 } from "vscode-languageserver";
-import PlSql from "@treesitter-parser/binding";
 
 function getIndetifierCompletions(node: SyntaxNode): CompletionItem[] {
   const items: { [key: string]: CompletionItem } = {};
@@ -51,7 +51,7 @@ function getKeywordCompletions(node: SyntaxNode): CompletionItem[] {
 }
 
 export function getOnCompletionHandler(
-    context: ServerContext
+  context: ServerContext,
 ): (
   params: CompletionParams,
 ) => CompletionItem[] | CompletionList | undefined | null {
@@ -64,9 +64,8 @@ export function getOnCompletionHandler(
 
     const identifierItems = getIndetifierCompletions(tree.rootNode);
 
-    const currentNode = getDeepestNodeAtPosition(
-      tree.rootNode,
-      params.position,
+    const currentNode = tree.rootNode.descendantForPosition(
+      toTreeSitterPosition(params.position),
     );
     const keywordItems = getKeywordCompletions(currentNode);
 
