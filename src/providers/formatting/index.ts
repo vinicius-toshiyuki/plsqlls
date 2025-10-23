@@ -41,7 +41,7 @@ function format(
   options: FormatOptions,
   range: Range,
 ): TextEdit[] {
-  const newText = buildParts(formatNode(node, options), options);
+  const newText = buildParts(formatNode(node, options), options, range);
   return [{ newText, range }];
 }
 

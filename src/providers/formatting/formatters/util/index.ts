@@ -1,10 +1,13 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "../node";
+import { Range } from "vscode-languageserver";
+import { isRangeContained } from "@util";
 
 export function buildParts(
   parts: FormatPart[],
   options: FormatOptions,
+  range?: Range,
 ): string {
   let indent = 0;
   let wasNewLine = false;
@@ -87,6 +90,10 @@ export function buildParts(
       return processedPart;
     })
     .map((part) => {
+      if (range && !isRangeContained(part.ctx.range, range)) {
+        return "";
+      }
+
       const prefix = "\n".repeat(part.ctx.skipLines ?? 0);
 
       if (
