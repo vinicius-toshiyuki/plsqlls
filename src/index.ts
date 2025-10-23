@@ -25,6 +25,7 @@ import { getOnReferencesHandler } from "./providers/references";
 import { getOnHoverHandler } from "./providers/hover";
 
 const connection = createConnection(ProposedFeatures.all);
+const documents = new TextDocuments(TextDocument);
 
 const context: ServerContext = {
   trees: {},
@@ -93,5 +94,5 @@ connection.onDocumentFormatting(getOnDocumentFormattingHandler(context));
 connection.onReferences(getOnReferencesHandler(context));
 connection.onHover(getOnHoverHandler(context));
 
-context.documents.listen(connection);
+documents.listen(connection);
 connection.listen();
