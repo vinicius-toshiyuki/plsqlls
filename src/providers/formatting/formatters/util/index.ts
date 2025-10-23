@@ -125,6 +125,17 @@ export function buildParts(
     })
     .join("");
 
+  if (range) {
+    const lines = text.split("\n");
+
+    const firstLineIndex = lines.findIndex((line) => line.trim().length > 0);
+    const lastLineIndex = lines.findLastIndex((line) => line.trim().length > 0);
+
+    if (firstLineIndex >= 0 && lastLineIndex >= 0) {
+      return lines.slice(firstLineIndex, lastLineIndex + 1).join("\n");
+    }
+  }
+
   return text;
 }
 
