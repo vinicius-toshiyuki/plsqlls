@@ -171,6 +171,7 @@ export const GRAMMAR = {
         "DENSE_RANK_BUILTIN_PROGRAM": "dense_rank_builtin_program",
         "TYPE": "type",
         "BUILTIN_TYPE": "builtin_type",
+        "BUILTIN_TYPE_NAME": "builtin_type_name",
         "UDT": "udt",
         "IDENTIFIER": "identifier",
         "CHAIN_ACCESSOR": "chain_accessor",
