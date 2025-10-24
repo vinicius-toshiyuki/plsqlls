@@ -63,8 +63,14 @@ export type FormatPart = {
   indent?: number;
   indentAfter?: number;
   spaceAfter?: boolean;
-  break?: boolean | { indentAfter?: number | FormatPartWidthMatching };
   spaceBeforeCollapse?: boolean;
+  break?:
+    | boolean
+    | {
+        indentAfter?: number;
+        widthMatching?: FormatPartWidthMatching;
+        spaceAfter?: boolean;
+      };
   skipLines?: number;
   widthMatching?: FormatPartWidthMatching;
   range: Range;

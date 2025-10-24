@@ -80,8 +80,8 @@ export function fmtSelect(
           {
             text: textForLeafNode(child),
             spaceAfter: true,
-            break: { indentAfter: { namespace, group } },
             spaceBeforeCollapse: true,
+            break: { widthMatching: { namespace, group }, spaceAfter: true },
             range: toDocumentRange(child),
           },
         ];

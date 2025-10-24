@@ -105,13 +105,17 @@ export function buildParts(
         lines[part.lineIndex].text.length > options.maxLength
       ) {
         let indent = options.indentAmount;
+        let padding = 0;
 
         if (typeof part.ctx.break === "object") {
           if (typeof part.ctx.break.indentAfter === "number") {
             indent = part.ctx.break.indentAfter;
-          } else if (typeof part.ctx.break.indentAfter === "object") {
-            const { namespace, group } = part.ctx.break.indentAfter;
-            indent = matchGroups.get(namespace)?.get(group) ?? indent;
+          }
+          if (typeof part.ctx.break.widthMatching === "object") {
+            const { namespace, group } = part.ctx.break.widthMatching;
+            indent = 0;
+            padding = matchGroups.get(namespace)?.get(group) ?? 0;
+            padding += part.ctx.break.spaceAfter ? 1 : 0;
           }
         }
 
@@ -121,7 +125,8 @@ export function buildParts(
           "\n" +
           options.indentText.repeat(
             Math.max(0, lines[part.lineIndex].indent + indent),
-          )
+          ) +
+          " ".repeat(padding)
         );
       }
       return prefix + part.text;
