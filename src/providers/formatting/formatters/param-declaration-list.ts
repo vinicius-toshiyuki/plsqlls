@@ -1,5 +1,5 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR, toDocumentRange } from "@util";
+import { GRAMMAR } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 
@@ -19,7 +19,6 @@ function fmtParamDeclaration(
               group: "identifier",
             },
           },
-          { text: " ", range: toDocumentRange(child) },
         ];
       }
       case GRAMMAR.RULE.TYPE: {

@@ -20,7 +20,6 @@ function fmtBlockDeclaration(
               group: "identifier",
             },
           },
-          { text: " ", range: toDocumentRange(child) },
         ];
       }
       case GRAMMAR.RULE.SEMICOLON_PUNCTUATION: {
