@@ -23,6 +23,7 @@ export function fmtNode(
         {
           text: textForLeafNode(node),
           newLine: true,
+          spaceBeforeCollapse: true,
           range: toDocumentRange(node),
         },
       ];

@@ -28,6 +28,7 @@ function fmtBlockDeclaration(
           {
             text: textForLeafNode(child),
             newLine: true,
+            spaceBeforeCollapse: true,
             range: toDocumentRange(child),
           },
         ];

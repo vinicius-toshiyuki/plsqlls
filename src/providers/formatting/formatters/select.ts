@@ -11,15 +11,6 @@ function fmtSelectColumn(
 ): FormatPart[] {
   return node.children.flatMap((child) => {
     switch (child.type) {
-      case GRAMMAR.RULE.EXPRESSION: {
-        const parts = fmtNode(child, options);
-        assertAtLeastOnePart(parts);
-
-        if (!child.nextSibling) {
-          parts[parts.length - 1].spaceAfter = false;
-        }
-        return parts;
-      }
       case GRAMMAR.RULE.AS_KEYWORD: {
         return [
           {
@@ -28,9 +19,6 @@ function fmtSelectColumn(
             range: toDocumentRange(child),
           },
         ];
-      }
-      case GRAMMAR.RULE.IDENTIFIER: {
-        return [{ ...fmtNode1(child, options), spaceAfter: false }];
       }
       default: {
         return fmtNode(child, options);
@@ -121,8 +109,6 @@ export function fmtSelect(
           group,
         });
 
-        parts[parts.length - 1].spaceAfter = false;
-
         return parts;
       }
       case GRAMMAR.RULE.COMMA_PUNCTUATION: {
@@ -131,6 +117,7 @@ export function fmtSelect(
             text: textForLeafNode(child),
             spaceAfter: true,
             break: { indentAfter: { namespace, group } },
+            spaceBeforeCollapse: true,
             range: toDocumentRange(child),
           },
         ];

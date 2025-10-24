@@ -36,7 +36,7 @@ export function buildParts(
   });
 
   const text = parts
-    .map((part) => {
+    .map((part, index, parts) => {
       if (part.widthMatching) {
         const width =
           matchGroups
@@ -67,7 +67,10 @@ export function buildParts(
 
       if (part.newLine) {
         text += "\n";
-      } else if (part.spaceAfter) {
+      } else if (
+        part.spaceAfter &&
+        (index + 1 >= parts.length - 1 || !parts[index + 1].spaceBeforeCollapse)
+      ) {
         text += " ";
       }
 

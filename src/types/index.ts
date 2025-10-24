@@ -64,6 +64,7 @@ export type FormatPart = {
   indentAfter?: number;
   spaceAfter?: boolean;
   break?: boolean | { indentAfter?: number | FormatPartWidthMatching };
+  spaceBeforeCollapse?: boolean;
   skipLines?: number;
   widthMatching?: FormatPartWidthMatching;
   range: Range;

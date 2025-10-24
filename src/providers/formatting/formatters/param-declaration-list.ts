@@ -1,7 +1,6 @@
 import { FormatOptions, FormatPart } from "@types";
 import { GRAMMAR, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
-import { spaceAfterPart } from "./util";
 import { fmtNode, fmtNode1 } from "./node";
 
 function fmtParamDeclaration(
@@ -57,7 +56,13 @@ export function fmtParamDeclarationList(
         return parts;
       }
       case GRAMMAR.RULE.COMMA_PUNCTUATION: {
-        return [{ ...spaceAfterPart(child, options), break: true }];
+        return [
+          {
+            ...fmtNode1(child, options),
+            break: true,
+            spaceBeforeCollapse: true,
+          },
+        ];
       }
       default: {
         return fmtNode(child, options);
