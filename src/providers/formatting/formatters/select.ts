@@ -1,9 +1,8 @@
 import { FormatOptions, FormatPart, FormatPartWidthMatching } from "@types";
 import { SyntaxNode } from "tree-sitter";
-import { fmtNode, fmtNode1 } from "./node";
+import { fmtNode } from "./node";
 import { GRAMMAR, toDocumentRange } from "@util";
 import { textForLeafNode } from "./leaf-node";
-import { assertAtLeastOnePart } from "./util/asserts";
 
 function fmtSelectColumn(
   node: SyntaxNode,
@@ -51,22 +50,6 @@ function fmtSelectTables(
   });
 }
 
-function alignWithSelect(
-  node: SyntaxNode,
-  parts: FormatPart[],
-  _: FormatOptions,
-  beforeFirstNodeType: string,
-  widthMatching: FormatPartWidthMatching,
-): void {
-  assertAtLeastOnePart(parts);
-
-  const firstPart = parts[0];
-  const isFirstColumn = node.previousSibling?.type === beforeFirstNodeType;
-  if (isFirstColumn) {
-    firstPart.break = { indentAfter: widthMatching };
-  }
-}
-
 export function fmtSelect(
   node: SyntaxNode,
   options: FormatOptions,
@@ -77,15 +60,7 @@ export function fmtSelect(
   return node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.SELECT_COLUMN: {
-        const parts = fmtSelectColumn(child, options);
-
-        assertAtLeastOnePart(parts);
-        alignWithSelect(child, parts, options, GRAMMAR.RULE.SELECT_KEYWORD, {
-          namespace,
-          group,
-        });
-
-        return parts;
+        return fmtSelectColumn(child, options);
       }
       case GRAMMAR.RULE.SELECT_KEYWORD:
       case GRAMMAR.RULE.INTO_KEYWORD:
