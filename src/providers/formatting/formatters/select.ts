@@ -100,17 +100,6 @@ export function fmtSelect(
           },
         ];
       }
-      case GRAMMAR.RULE.CHAIN_ACCESSOR: {
-        const parts = fmtNode(child, options);
-
-        assertAtLeastOnePart(parts);
-        alignWithSelect(child, parts, options, GRAMMAR.RULE.INTO_KEYWORD, {
-          namespace,
-          group,
-        });
-
-        return parts;
-      }
       case GRAMMAR.RULE.COMMA_PUNCTUATION: {
         return [
           {
