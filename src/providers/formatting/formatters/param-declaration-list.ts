@@ -2,6 +2,7 @@ import { FormatOptions, FormatPart } from "@types";
 import { GRAMMAR } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
+import { assertAtLeastOnePart } from "./util/asserts";
 
 function fmtParamDeclaration(
   node: SyntaxNode,
@@ -49,9 +50,12 @@ export function fmtParamDeclarationList(
     switch (child.type) {
       case GRAMMAR.RULE.PARAM_DECLARATION: {
         const parts = fmtParamDeclaration(child, options, namespace);
+
+        assertAtLeastOnePart(parts);
         if (child.nextSibling === null) {
-          parts.at(-1)!.break = { indentAfter: 0 };
+          parts[parts.length - 1].break = { indentAfter: 0 };
         }
+
         return parts;
       }
       case GRAMMAR.RULE.COMMA_PUNCTUATION: {
