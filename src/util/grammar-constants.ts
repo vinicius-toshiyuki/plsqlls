@@ -182,7 +182,12 @@ export const GRAMMAR = {
         "STRING_CONTENT": "string_content",
         "COMMENT": "comment",
         "PRIOR_EXPRESSION": "prior_expression",
-        "LEVEL_EXPRESSION": "level_expression"
+        "LEVEL_EXPRESSION": "level_expression",
+        "NUMBER": "number",
+        "STRING_BRACKET__OPEN": "string_bracket__open",
+        "STRING_BRACKET__CLOSE": "string_bracket__close",
+        "STRING_PART": "string_part",
+        "STRING_MARKER": "string_marker"
     },
     "FIELD": {
         "PACKAGE_IDENTIFIER": "package_identifier",

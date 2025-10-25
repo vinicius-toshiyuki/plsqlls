@@ -12,6 +12,7 @@ import { fmtChainAccessor } from "./chain-accessor";
 import { fmtChainExpression } from "./chain-expression";
 import { fmtStatement } from "./statement";
 import { fmtCallExpression } from "./call-expression";
+import { fmtString } from "./string";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -54,6 +55,9 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.CALL_EXPRESSION: {
       return fmtCallExpression(node, options);
+    }
+    case GRAMMAR.RULE.STRING: {
+        return fmtString(node, options);
     }
     default: {
       if (KEYWORD_NODE_TYPES.includes(node.type)) {
