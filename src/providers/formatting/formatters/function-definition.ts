@@ -1,7 +1,6 @@
 import { FormatOptions, FormatPart } from "@types";
 import { GRAMMAR, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
-import { spaceAfterPart } from "./util";
 import { fmtNode, fmtNode1 } from "./node";
 import { textForLeafNode } from "./leaf-node";
 
@@ -14,7 +13,7 @@ export function fmtFunctionDefinition(
       case GRAMMAR.RULE.FUNCTION_KEYWORD:
       case GRAMMAR.RULE.PARENTHESIS_BRACKET__CLOSE:
       case GRAMMAR.RULE.RETURN_KEYWORD: {
-        return [spaceAfterPart(child, options)];
+        return [fmtNode1(child, options)];
       }
       case GRAMMAR.RULE.TYPE: {
         return [
@@ -29,6 +28,7 @@ export function fmtFunctionDefinition(
           {
             text: textForLeafNode(child),
             break: true,
+            spaceBeforeCollapse: true,
             range: toDocumentRange(child),
           },
         ];
@@ -56,6 +56,7 @@ export function fmtFunctionDefinition(
           {
             indent: -options.indentAmount,
             text: textForLeafNode(child),
+            spaceAfter: true,
             range: toDocumentRange(child),
           },
         ];
