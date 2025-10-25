@@ -3,6 +3,7 @@ import { GRAMMAR, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 import { textForLeafNode } from "./leaf-node";
+import { assertAtLeastOnePart } from "./util/asserts";
 
 function fmtBlockDeclaration(
   node: SyntaxNode,
@@ -44,10 +45,23 @@ export function fmtBlockDeclarationList(
   options: FormatOptions,
 ): FormatPart[] {
   const namespace = node.id.toFixed(0);
+
   const parts = node.children.flatMap((child) => {
+    const rowDiff =
+      child.startPosition.row -
+      (child.previousSibling?.endPosition ?? child.startPosition).row;
+
     switch (child.type) {
       case GRAMMAR.RULE.BLOCK_DECLARATION: {
-        return fmtBlockDeclaration(child, options, namespace);
+        const parts = fmtBlockDeclaration(child, options, namespace);
+
+        assertAtLeastOnePart(parts);
+
+        if (rowDiff > 1) {
+          parts[0].skipLines = 1;
+        }
+
+        return parts;
       }
       default: {
         return fmtNode(child, options);
