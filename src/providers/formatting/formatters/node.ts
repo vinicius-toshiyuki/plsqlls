@@ -13,6 +13,7 @@ import { fmtChainExpression } from "./chain-expression";
 import { fmtStatement } from "./statement";
 import { fmtCallExpression } from "./call-expression";
 import { assertOnePart } from "./util/asserts";
+import { fmtProcedureDefinition } from "./procedure-definition";
 import { fmtType } from "./type";
 import { fmtString } from "./string";
 
@@ -33,6 +34,9 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.FUNCTION_DEFINITION: {
       return fmtFunctionDefinition(node, options);
+    }
+    case GRAMMAR.RULE.PROCEDURE_DEFINITION: {
+      return fmtProcedureDefinition(node, options);
     }
     case GRAMMAR.RULE.PARAM_DECLARATION_LIST: {
       return fmtParamDeclarationList(node, options);
