@@ -12,6 +12,7 @@ import { fmtChainAccessor } from "./chain-accessor";
 import { fmtChainExpression } from "./chain-expression";
 import { fmtStatement } from "./statement";
 import { fmtCallExpression } from "./call-expression";
+import { assertOnePart } from "./util/asserts";
 import { fmtType } from "./type";
 import { fmtString } from "./string";
 
@@ -85,9 +86,7 @@ export function fmtNode(
 
 export function fmtNode1(node: SyntaxNode, options: FormatOptions): FormatPart {
   const parts = fmtNode(node, options);
-  if (parts.length !== 1) {
-    throw new Error("Expected a single part");
-  }
+  assertOnePart(parts);
 
   return parts[0];
 }
