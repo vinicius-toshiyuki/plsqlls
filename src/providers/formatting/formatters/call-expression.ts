@@ -1,8 +1,27 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
-import { fmtNode } from "./node";
+import { fmtNode, fmtNode1 } from "./node";
 import { GRAMMAR } from "@util";
 import { assertAtLeastOnePart } from "./util/asserts";
+
+function fmtArguments(node: SyntaxNode, options: FormatOptions): FormatPart[] {
+  return node.children.flatMap((child) => {
+    switch (child.type) {
+      case GRAMMAR.RULE.COMMA_PUNCTUATION: {
+        return [
+          {
+            ...fmtNode1(child, options),
+            break: true,
+            spaceBeforeCollapse: true,
+          },
+        ];
+      }
+      default: {
+        return fmtNode(child, options);
+      }
+    }
+  });
+}
 
 export function fmtCallExpression(
   node: SyntaxNode,
@@ -10,15 +29,35 @@ export function fmtCallExpression(
 ): FormatPart[] {
   return node.children.flatMap((child) => {
     switch (child.type) {
-      case GRAMMAR.RULE.EXPRESSION:
-      case GRAMMAR.RULE.PARENTHESIS_BRACKET__OPEN:
       case GRAMMAR.RULE.ARGUMENTS: {
-        const parts = fmtNode(child, options);
-        assertAtLeastOnePart(parts);
+        const parts = fmtArguments(child, options);
 
-        parts[parts.length - 1].spaceAfter = false;
+        assertAtLeastOnePart(parts);
+        parts[parts.length - 1].break = { indentAfter: 0 };
 
         return parts;
+      }
+      case GRAMMAR.RULE.PARENTHESIS_BRACKET__OPEN: {
+        return [
+          {
+            ...fmtNode1(child, options),
+            break: {
+              indentAfter: options.indentAmount,
+            },
+            spaceAfter: false,
+            spaceBeforeCollapse: true,
+          },
+        ];
+      }
+      case GRAMMAR.RULE.PARENTHESIS_BRACKET__CLOSE: {
+        return [
+          {
+            ...fmtNode1(child, options),
+            indent: -options.indentAmount,
+            spaceAfter: true,
+            spaceBeforeCollapse: true,
+          },
+        ];
       }
       default: {
         return fmtNode(child, options);
