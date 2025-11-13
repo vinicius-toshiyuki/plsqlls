@@ -16,6 +16,7 @@ import { assertOnePart } from "./util/asserts";
 import { fmtProcedureDefinition } from "./procedure-definition";
 import { fmtType } from "./type";
 import { fmtString } from "./string";
+import { fmtTypeDefinition } from "./type-definition";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -44,6 +45,9 @@ export function fmtNode(
     case GRAMMAR.RULE.BLOCK_DECLARATION_LIST: {
       return fmtBlockDeclarationList(node, options);
     }
+    case GRAMMAR.RULE.UDT_DEFINITION: {
+      return fmtTypeDefinition(node, options);
+    }
     case GRAMMAR.RULE.STATEMENT: {
       return fmtStatement(node, options);
     }
@@ -63,10 +67,10 @@ export function fmtNode(
       return fmtCallExpression(node, options);
     }
     case GRAMMAR.RULE.TYPE: {
-        return fmtType(node, options);
+      return fmtType(node, options);
     }
     case GRAMMAR.RULE.STRING: {
-        return fmtString(node, options);
+      return fmtString(node, options);
     }
     default: {
       if (KEYWORD_NODE_TYPES.includes(node.type)) {
