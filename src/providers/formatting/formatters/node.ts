@@ -17,6 +17,8 @@ import { fmtProcedureDefinition } from "./procedure-definition";
 import { fmtType } from "./type";
 import { fmtString } from "./string";
 import { fmtTypeDefinition } from "./type-definition";
+import { fmtLoopStatement } from "./loop-statement";
+import { fmtForStatement } from "./for-statement";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -53,6 +55,12 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.IF_STATEMENT: {
       return fmtIfStatement(node, options);
+    }
+    case GRAMMAR.RULE.FOR_STATEMENT: {
+      return fmtForStatement(node, options);
+    }
+    case GRAMMAR.RULE.LOOP_STATEMENT: {
+      return fmtLoopStatement(node, options);
     }
     case GRAMMAR.RULE.SELECT: {
       return fmtSelect(node, options);
