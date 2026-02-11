@@ -1,8 +1,13 @@
-import { pathsToModuleNameMapper } from "ts-jest";
+import { pathsToModuleNameMapper, createDefaultPreset } from "ts-jest";
 import tsconfig from "./tsconfig.json" with { type: "json" };
 
 export default {
-  preset: "ts-jest",
+  // preset: "ts-jest",
+  ...createDefaultPreset({
+    diagnostics: {
+      ignoreCodes: [151002],
+    },
+  }),
   testEnvironment: "node",
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: process.cwd(),
