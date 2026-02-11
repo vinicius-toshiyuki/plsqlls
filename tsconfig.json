@@ -27,6 +27,9 @@
             "@providers/formatting": [
                 "./src/providers/formatting/index.ts"
             ],
+            "@providers/formatting/*": [
+                "./src/providers/formatting/formatters/*"
+            ],
             "@providers/completion": [
                 "./src/providers/completion/index.ts"
             ],
