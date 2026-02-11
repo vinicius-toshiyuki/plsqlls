@@ -20,6 +20,7 @@ import { fmtForStatement } from "./for-statement";
 import { fmtBlockBody } from "./block-block";
 import { fmtExpression } from "./expression/index";
 import { fmtAccessor } from "./accessor";
+import { fmtTableExpression } from "./table-expression";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -65,6 +66,9 @@ export function fmtNode(
     }
     case GRAMMAR.RULE.LOOP_STATEMENT: {
       return fmtLoopStatement(node, options);
+    }
+    case GRAMMAR.RULE.TABLE_EXPRESSION: {
+      return fmtTableExpression(node, options);
     }
     case GRAMMAR.RULE.SELECT: {
       return fmtSelect(node, options);
