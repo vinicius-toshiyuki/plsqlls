@@ -9,9 +9,7 @@ import { fmtBlockDeclarationList } from "./block-declaration-list";
 import { fmtIfStatement } from "./if-statement";
 import { fmtSelect } from "./select";
 import { fmtChainAccessor } from "./chain-accessor";
-import { fmtChainExpression } from "./chain-expression";
 import { fmtStatement } from "./statement";
-import { fmtCallExpression } from "./call-expression";
 import { assertOnePart } from "./util/asserts";
 import { fmtProcedureDefinition } from "./procedure-definition";
 import { fmtType } from "./type";
@@ -20,6 +18,8 @@ import { fmtTypeDefinition } from "./type-definition";
 import { fmtLoopStatement } from "./loop-statement";
 import { fmtForStatement } from "./for-statement";
 import { fmtBlockBody } from "./block-block";
+import { fmtExpression } from "./expression/index";
+import { fmtAccessor } from "./accessor";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -69,14 +69,14 @@ export function fmtNode(
     case GRAMMAR.RULE.SELECT: {
       return fmtSelect(node, options);
     }
+    case GRAMMAR.RULE.ACCESSOR: {
+        return fmtAccessor(node, options);
+    }
     case GRAMMAR.RULE.CHAIN_ACCESSOR: {
       return fmtChainAccessor(node, options);
     }
-    case GRAMMAR.RULE.CHAIN_EXPRESSION: {
-      return fmtChainExpression(node, options);
-    }
-    case GRAMMAR.RULE.CALL_EXPRESSION: {
-      return fmtCallExpression(node, options);
+    case GRAMMAR.RULE.EXPRESSION: {
+      return fmtExpression(node, options);
     }
     case GRAMMAR.RULE.TYPE: {
       return fmtType(node, options);

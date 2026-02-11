@@ -3,6 +3,7 @@ import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "./node";
 import { GRAMMAR, toDocumentRange } from "@util";
 import { textForLeafNode } from "./leaf-node";
+import { assertAtLeastOnePart } from "./util/asserts";
 
 function fmtSelectColumn(
   node: SyntaxNode,
@@ -40,6 +41,7 @@ function fmtSelectTables(
           spaceAfter: true,
           widthMatching,
           newLineBefore: true,
+          spaceBeforeCollapse: true,
           range: toDocumentRange(child),
         };
       }
@@ -57,7 +59,7 @@ export function fmtSelect(
   const namespace = node.id.toFixed(0);
   const group = "select";
 
-  return node.children.flatMap((child) => {
+  const parts = node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.SELECT_COLUMN: {
         return fmtSelectColumn(child, options).map((part) => {
@@ -101,4 +103,7 @@ export function fmtSelect(
       }
     }
   });
+  assertAtLeastOnePart(parts);
+  parts.at(-1)!.spaceAfter = false;
+  return parts;
 }

@@ -1,8 +1,8 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
-import { fmtNode, fmtNode1 } from "./node";
+import { fmtNode, fmtNode1 } from "../node";
 import { GRAMMAR } from "@util";
-import { assertAtLeastOnePart } from "./util/asserts";
+import { assertAtLeastOnePart } from "../util/asserts";
 
 function fmtArguments(node: SyntaxNode, options: FormatOptions): FormatPart[] {
   return node.children.flatMap((child) => {

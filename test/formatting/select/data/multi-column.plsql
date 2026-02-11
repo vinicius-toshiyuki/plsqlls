@@ -1,0 +1,1 @@
+select sysdate,to_date(  'char' ) , 1 + 3 from test

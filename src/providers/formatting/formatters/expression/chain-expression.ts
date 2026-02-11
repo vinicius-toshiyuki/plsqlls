@@ -1,9 +1,9 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
-import { fmtNode, fmtNode1 } from "./node";
+import { fmtNode, fmtNode1 } from "../node";
 import { GRAMMAR, toDocumentRange } from "@util";
-import { textForLeafNode } from "./leaf-node";
-import { assertAtLeastOnePart } from "./util/asserts";
+import { textForLeafNode } from "../leaf-node";
+import { assertAtLeastOnePart } from "../util/asserts";
 
 export function fmtChainExpression(
   node: SyntaxNode,
