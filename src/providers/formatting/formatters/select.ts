@@ -60,7 +60,14 @@ export function fmtSelect(
   return node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.SELECT_COLUMN: {
-        return fmtSelectColumn(child, options);
+        return fmtSelectColumn(child, options).map((part) => {
+          if (part.break) {
+            part.break = typeof part.break === "object" ? part.break : {};
+            part.break.widthMatching = { namespace, group };
+            part.break.spaceAfter = true;
+          }
+          return part;
+        });
       }
       case GRAMMAR.RULE.SELECT_KEYWORD:
       case GRAMMAR.RULE.INTO_KEYWORD:
