@@ -19,6 +19,15 @@ export function fmtForStatement(
           },
         ];
       }
+      case GRAMMAR.RULE.RANGE_OPERATOR: {
+        return [
+          {
+            ...fmtNode1(child, options),
+            spaceAfter: false,
+            spaceBeforeCollapse: true,
+          },
+        ];
+      }
       case GRAMMAR.RULE.PARENTHESIS_BRACKET__CLOSE: {
         return [
           {

@@ -19,6 +19,7 @@ import { fmtString } from "./string";
 import { fmtTypeDefinition } from "./type-definition";
 import { fmtLoopStatement } from "./loop-statement";
 import { fmtForStatement } from "./for-statement";
+import { fmtBlockBody } from "./block-block";
 
 export function fmtNode(
   node: SyntaxNode,
@@ -34,6 +35,9 @@ export function fmtNode(
           range: toDocumentRange(node),
         },
       ];
+    }
+    case GRAMMAR.RULE.BLOCK_BODY: {
+      return fmtBlockBody(node, options);
     }
     case GRAMMAR.RULE.FUNCTION_DEFINITION: {
       return fmtFunctionDefinition(node, options);
