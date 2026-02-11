@@ -1,8 +1,8 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "../node";
-import { GRAMMAR } from "@util";
 import { fmtNode1 } from "../node";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export function fmtSequenceExpression(
   node: SyntaxNode,

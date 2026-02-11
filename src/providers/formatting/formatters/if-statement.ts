@@ -1,9 +1,10 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "./node";
-import { GRAMMAR, toDocumentRange } from "@util";
+import { toDocumentRange } from "@util";
 import { spaceAfterPart } from "./util";
 import { textForLeafNode } from "./leaf-node";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export function fmtIfStatement(
   node: SyntaxNode,

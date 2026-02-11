@@ -7,9 +7,7 @@ import {
 import { Range as DocumentRange, Position } from "vscode-languageserver";
 import { getDeclaration } from "@providers/declaration";
 import { LanguageSymbol, ServerConfig, SymbolMap } from "@types";
-import { GRAMMAR } from "./grammar-constants";
-
-export { GRAMMAR } from "./grammar-constants";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export const BUILTIN_NODE = Object.fromEntries(
   Object.entries(GRAMMAR.RULE).filter(([key]) => key.match(/BUILTIN/)),

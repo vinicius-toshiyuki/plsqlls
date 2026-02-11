@@ -1,8 +1,8 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 import { assertAtLeastOnePart } from "./util/asserts";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 function fmtParamDeclaration(
   node: SyntaxNode,

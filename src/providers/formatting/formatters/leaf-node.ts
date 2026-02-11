@@ -1,6 +1,7 @@
-import { GRAMMAR, KEYWORD_NODE_TYPES, OPERATOR_NODE_TYPES } from "@util";
-import PlSql from "@treesitter-parser/binding";
+import { KEYWORD_NODE_TYPES, OPERATOR_NODE_TYPES } from "@util";
+import PlSql from "tree-sitter-plsqloracle";
 import { Query, SyntaxNode } from "tree-sitter";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 const UPPER_CASE_TYPES = [
   GRAMMAR.RULE.BUILTIN_PROGRAM,

@@ -1,7 +1,7 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "./node";
-import { GRAMMAR } from "@util";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 function fmtBuiltinType(
   node: SyntaxNode,

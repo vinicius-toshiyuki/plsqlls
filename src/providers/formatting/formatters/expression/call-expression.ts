@@ -1,8 +1,8 @@
 import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "../node";
-import { GRAMMAR } from "@util";
 import { assertAtLeastOnePart } from "../util/asserts";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 function fmtArguments(node: SyntaxNode, options: FormatOptions): FormatPart[] {
   return node.children.flatMap((child) => {

@@ -1,6 +1,7 @@
 import { ServerContext } from "@types";
-import { GRAMMAR, walkBreadth } from "@util";
+import { walkBreadth } from "@util";
 import { Tree } from "tree-sitter";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 import { FoldingRange, FoldingRangeParams } from "vscode-languageserver";
 
 function getFoldingRanges(tree: Tree): FoldingRange[] {

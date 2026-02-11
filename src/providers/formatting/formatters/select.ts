@@ -1,9 +1,10 @@
 import { FormatOptions, FormatPart, FormatPartWidthMatching } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode } from "./node";
-import { GRAMMAR, toDocumentRange } from "@util";
+import { toDocumentRange } from "@util";
 import { textForLeafNode } from "./leaf-node";
 import { assertAtLeastOnePart } from "./util/asserts";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 function fmtSelectColumn(
   node: SyntaxNode,

@@ -1,4 +1,4 @@
-import { GRAMMAR, KEYWORD_NODE_TYPES, toDocumentRange } from "@util";
+import { KEYWORD_NODE_TYPES, toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { FormatOptions, FormatPart } from "@types";
 import { textForLeafNode } from "./leaf-node";
@@ -21,6 +21,7 @@ import { fmtBlockBody } from "./block-block";
 import { fmtExpression } from "./expression/index";
 import { fmtAccessor } from "./accessor";
 import { fmtTableExpression } from "./table-expression";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export function fmtNode(
   node: SyntaxNode,

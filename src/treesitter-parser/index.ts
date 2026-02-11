@@ -1,5 +1,5 @@
 import Parser from "tree-sitter";
-import PlSql from "@treesitter-parser/binding";
+import PlSql from "tree-sitter-plsqloracle";
 
 export function createParser() {
   const parser = new Parser();

@@ -1,9 +1,10 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR, toDocumentRange } from "@util";
+import { toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 import { textForLeafNode } from "./leaf-node";
 import { assertAtLeastOnePart } from "./util/asserts";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 function fmtBlockDeclaration(
   node: SyntaxNode,

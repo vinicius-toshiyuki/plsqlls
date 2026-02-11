@@ -3,12 +3,12 @@ import { ServerContext } from "@types";
 import {
   getContainingScope,
   getDeepestNodeAtPosition,
-  GRAMMAR,
   PROGRAM_DEFINITION_TYPES,
   SCOPE_NODE,
   toDocumentPosition,
 } from "@util";
 import { SyntaxNode } from "tree-sitter";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 import {
   CodeAction,
   CodeActionKind,

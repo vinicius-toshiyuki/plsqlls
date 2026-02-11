@@ -1,7 +1,8 @@
 import { FormatOptions, FormatPart } from "@types";
-import { GRAMMAR, toDocumentRange } from "@util";
+import { toDocumentRange } from "@util";
 import { SyntaxNode } from "tree-sitter";
 import { textForLeafNode } from "./leaf-node";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export function fmtKeyword(node: SyntaxNode, _: FormatOptions): FormatPart[] {
   switch (node.type) {

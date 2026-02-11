@@ -3,7 +3,6 @@ import {
   getIdentifierKey,
   getNodeBefore,
   getSymbol,
-  GRAMMAR,
   isReference,
   toDocumentRange,
   walkBreadth,
@@ -20,6 +19,7 @@ import { ServerConfig, ServerContext } from "../../types";
 import { Tree } from "tree-sitter";
 import { getDeclaration } from "../declaration";
 import { isExternalSymbol } from "../../util";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export enum DIAGNOSTIC_CODE {
   SYNTAX_ERROR,

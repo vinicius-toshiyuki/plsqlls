@@ -8,7 +8,6 @@ import {
   getContainingScope,
   getIdentifierKey,
   getSymbol,
-  GRAMMAR,
   isBuiltinNode,
   isField,
   isScopeNode,
@@ -17,6 +16,7 @@ import {
   traverse,
 } from "@util";
 import { SyntaxNode } from "tree-sitter";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 export function getDeclaration(
   identifierNode: SyntaxNode,

@@ -1,6 +1,6 @@
-import PlSql from "@treesitter-parser/binding";
+import PlSql from "tree-sitter-plsqloracle";
 import { ServerContext } from "@types";
-import { GRAMMAR, toTreeSitterPosition, walkBreadth } from "@util";
+import { toTreeSitterPosition, walkBreadth } from "@util";
 import { LookaheadIterator, SyntaxNode } from "tree-sitter";
 import {
   CompletionItem,
@@ -8,6 +8,7 @@ import {
   CompletionList,
   CompletionParams,
 } from "vscode-languageserver";
+import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
 
 function getIndetifierCompletions(node: SyntaxNode): CompletionItem[] {
   const items: { [key: string]: CompletionItem } = {};
