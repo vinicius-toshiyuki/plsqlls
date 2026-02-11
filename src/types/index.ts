@@ -74,7 +74,13 @@ export type FormatPart = {
   skipLines?: number;
   widthMatching?: FormatPartWidthMatching;
   range: Range;
+  forceLineBreak?: boolean;
 };
+
+export type FormatPartContext = Pick<
+  FormatPart,
+  "range" | "skipLines" | "break" | "newLine"
+>;
 
 export type FormatOptions = {
   indentAmount: number;

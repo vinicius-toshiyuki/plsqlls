@@ -11,7 +11,6 @@ export function fmtFunctionDefinition(
   return node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.FUNCTION_KEYWORD:
-      case GRAMMAR.RULE.PARENTHESIS_BRACKET__CLOSE:
       case GRAMMAR.RULE.RETURN_KEYWORD: {
         return [fmtNode1(child, options)];
       }
@@ -27,9 +26,18 @@ export function fmtFunctionDefinition(
         return [
           {
             text: textForLeafNode(child),
-            break: true,
+            break: {
+              indentAfter: options.indentAmount,
+            },
             spaceBeforeCollapse: true,
             range: toDocumentRange(child),
+          },
+        ];
+      case GRAMMAR.RULE.PARENTHESIS_BRACKET__CLOSE:
+        return [
+          {
+            ...fmtNode1(child, options),
+            break: true,
           },
         ];
       case GRAMMAR.RULE.IS_KEYWORD:

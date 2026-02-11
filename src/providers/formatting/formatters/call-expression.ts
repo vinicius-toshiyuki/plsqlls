@@ -33,7 +33,7 @@ export function fmtCallExpression(
         const parts = fmtArguments(child, options);
 
         assertAtLeastOnePart(parts);
-        parts[parts.length - 1].break = { indentAfter: 0 };
+        parts[parts.length - 1].break = { indentAfter: -options.indentAmount };
 
         return parts;
       }

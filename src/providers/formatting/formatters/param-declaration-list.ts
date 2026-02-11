@@ -53,7 +53,9 @@ export function fmtParamDeclarationList(
 
         assertAtLeastOnePart(parts);
         if (child.nextSibling === null) {
-          parts[parts.length - 1].break = { indentAfter: 0 };
+          parts[parts.length - 1].break = {
+            indentAfter: -options.indentAmount,
+          };
         }
 
         return parts;
