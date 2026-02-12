@@ -4,7 +4,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { createParser } from "@treesitter-parser/plsql";
 
-export const parser: ReturnType<typeof createParser> = createParser();
 export const options = {
   indentAmount: 4,
   indentText: " ",
@@ -49,9 +48,10 @@ export async function loadTestData(dir: string, files: TestDataMap) {
   return files;
 }
 
+const parser: ReturnType<typeof createParser> = createParser();
 export function testFormatting(files: TestDataMap) {
   return (testCase: string) => {
-    test(testCase, () => {
+    test(testCase, async () => {
       const data = files.get(testCase.replace(/\s/g, "-"));
 
       if (!data) {
@@ -62,10 +62,34 @@ export function testFormatting(files: TestDataMap) {
       expect(data.actual).toBeDefined();
       expect(data.expected).toBeDefined();
 
-      const tree = parser.parse(data.actual);
-      const text = buildParts(fmtNode(tree.rootNode, options), options);
+      parser.reset();
+      let tree = parser.parse(data.actual);
 
-      expect(text).toBe(data.expected);
+      await new Promise<void>((resolve, reject) => {
+        const timers: { timeout: NodeJS.Timeout; interval: NodeJS.Timeout } = {
+          timeout: setTimeout(() => {
+            clearInterval(timers.interval);
+            reject();
+          }, 1500),
+          interval: setInterval(() => {
+            if (tree?.rootNode) {
+              clearInterval(timers.interval);
+              clearTimeout(timers.timeout);
+              resolve();
+            } else {
+              tree = parser.parse(data.actual, tree);
+            }
+          }, 150),
+        };
+      });
+
+      expect(tree.rootNode).toBeDefined();
+
+      if (tree.rootNode) {
+        const text = buildParts(fmtNode(tree.rootNode, options), options);
+
+        expect(text).toBe(data.expected);
+      }
     });
   };
 }
