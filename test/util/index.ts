@@ -1,3 +1,5 @@
+import { fmtNode } from "@providers/formatting/node";
+import { buildParts } from "@providers/formatting/util/index";
 import fs from "node:fs";
 import path from "node:path";
 import { createParser } from "@treesitter-parser/plsql";
@@ -11,8 +13,7 @@ export const options = {
 
 export type TestDataMap = Map<string, { expected: string; actual: string }>;
 
-export async function loadTestData(dir: string) {
-  const files: TestDataMap = new Map();
+export async function loadTestData(dir: string, files: TestDataMap) {
   const dataDir = path.join(dir, "data");
   const dirFiles = fs.readdirSync(dataDir);
   const promises: Promise<void>[] = [];
@@ -46,4 +47,25 @@ export async function loadTestData(dir: string) {
   await Promise.all(promises);
 
   return files;
+}
+
+export function testFormatting(files: TestDataMap) {
+  return (testCase: string) => {
+    test(testCase, () => {
+      const data = files.get(testCase.replace(/\s/g, "-"));
+
+      if (!data) {
+        throw new Error("Invalid data");
+      }
+
+      expect(data).toBeDefined();
+      expect(data.actual).toBeDefined();
+      expect(data.expected).toBeDefined();
+
+      const tree = parser.parse(data.actual);
+      const text = buildParts(fmtNode(tree.rootNode, options), options);
+
+      expect(text).toBe(data.expected);
+    });
+  };
 }
