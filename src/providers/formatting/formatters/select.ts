@@ -79,6 +79,7 @@ export function fmtSelect(
           {
             text: textForLeafNode(child),
             spaceAfter: true,
+            spaceBeforeCollapse: true,
             widthMatching: { namespace, group },
             newLineBefore: child.type !== GRAMMAR.RULE.SELECT_KEYWORD,
             range: toDocumentRange(child),

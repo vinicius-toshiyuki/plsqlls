@@ -2,12 +2,13 @@ import { FormatOptions, FormatPart } from "@types";
 import { SyntaxNode } from "tree-sitter";
 import { fmtNode, fmtNode1 } from "./node";
 import { GRAMMAR } from "tree-sitter-plsqloracle/grammar-constants";
+import { assertAtLeastOnePart } from "./util/asserts";
 
 export function fmtForStatement(
   node: SyntaxNode,
   options: FormatOptions,
 ): FormatPart[] {
-  return node.children.flatMap((child) => {
+  const parts = node.children.flatMap((child) => {
     switch (child.type) {
       case GRAMMAR.RULE.PARENTHESIS_BRACKET__OPEN: {
         return [
@@ -43,4 +44,7 @@ export function fmtForStatement(
       }
     }
   });
+  assertAtLeastOnePart(parts);
+  parts[0].skipLines = 1;
+  return parts;
 }

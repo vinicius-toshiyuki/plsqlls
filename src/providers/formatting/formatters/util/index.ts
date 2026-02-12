@@ -72,7 +72,7 @@ export function buildParts(
       text += "\n";
     } else if (
       part.spaceAfter &&
-      (index + 1 >= parts.length - 1 || !parts[index + 1].spaceBeforeCollapse)
+      (index + 1 >= parts.length || !parts[index + 1].spaceBeforeCollapse)
     ) {
       text += " ";
     }
@@ -114,7 +114,11 @@ export function buildParts(
         return "";
       }
 
-      const prefix = "\n".repeat(part.ctx.skipLines ?? 0);
+      const prefix =
+        part.ctx.indent === undefined &&
+        (index === 0 || processedParts[index - 1].ctx.indentAfter === undefined)
+          ? "\n".repeat(part.ctx.skipLines ?? 0)
+          : "";
 
       if (
         part.ctx.break &&

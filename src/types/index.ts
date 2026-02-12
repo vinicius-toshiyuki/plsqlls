@@ -79,7 +79,7 @@ export type FormatPart = {
 
 export type FormatPartContext = Pick<
   FormatPart,
-  "range" | "skipLines" | "break" | "newLine"
+  "range" | "skipLines" | "break" | "newLine" | "indentAfter" | "indent"
 >;
 
 export type FormatOptions = {
