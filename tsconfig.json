@@ -6,6 +6,7 @@
         "lib": [
             "es2024"
         ],
+        "isolatedModules": true,
         "module": "nodenext",
         "sourceMap": true,
         "strict": true,
