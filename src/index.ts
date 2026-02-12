@@ -5,6 +5,8 @@ import {
   InitializeResult,
   ProposedFeatures,
   CodeActionKind,
+  Disposable,
+  TextDocumentChangeEvent,
 } from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
@@ -24,6 +26,7 @@ import { getOnCodeActionHandler } from "@providers/code-actions";
 import { getOnDefinitionHandler } from "@providers/definition";
 import { getOnReferencesHandler } from "./providers/references";
 import { getOnHoverHandler } from "./providers/hover";
+import { getOnDidChangeContentHandler } from "./handlers/change-content";
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
@@ -43,6 +46,7 @@ const context: ServerContext = {
   },
   console: connection.console,
 };
+const changeTimeouts: Record<string, NodeJS.Timeout> = {};
 
 connection.onInitialize(() => {
   const result: InitializeResult = {
@@ -79,6 +83,32 @@ connection.onInitialize(() => {
   return result;
 });
 
+const debounceHandler =
+  (uri: string, change: TextDocumentChangeEvent<TextDocument>) => () => {
+    delete changeTimeouts[uri];
+    getOnDidChangeContentHandler(context)(change);
+  };
+
+const CONTENT_CHANGE_DEBOUNCE = 100;
+documents.onDidChangeContent((change): Disposable => {
+  const uri = change.document.uri;
+  const timeout = changeTimeouts[uri];
+  if (timeout) {
+    clearTimeout(timeout);
+  }
+  changeTimeouts[uri] = setTimeout(
+    debounceHandler(uri, change),
+    CONTENT_CHANGE_DEBOUNCE,
+  );
+  return {
+    dispose: () => {
+      if (changeTimeouts[uri]) {
+        clearTimeout(changeTimeouts[uri]);
+        delete changeTimeouts[uri];
+      }
+    },
+  };
+});
 
 connection.onDeclaration(getOnDeclarationHandler(context));
 connection.onDefinition(getOnDefinitionHandler(context));
