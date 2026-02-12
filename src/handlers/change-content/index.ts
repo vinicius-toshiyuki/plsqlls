@@ -6,7 +6,6 @@ import {
   getScopeId,
   isReference,
   traverse,
-  walkDepthFirst,
 } from "@util";
 import { ServerContext } from "@types";
 import path from "path";
@@ -15,8 +14,6 @@ import { TextDocument } from "vscode-languageserver-textdocument";
 import fs from "fs";
 import { URI } from "vscode-uri";
 import { getDeclaration } from "@providers/declaration";
-import { diff } from "node:util";
-import { SyntaxNode } from "tree-sitter";
 
 export function getOnDidChangeContentHandler(
   context: ServerContext,
@@ -24,41 +21,6 @@ export function getOnDidChangeContentHandler(
   return (change) => {
     const uri = change.document.uri;
     const parser = createParser();
-    if (uri in context.trees) {
-      delete context.trees[uri];
-      const tree = context.trees[uri];
-      let newIndex = 0,
-        oldIndex = 0,
-        changeStart: SyntaxNode | null = null;
-      for (const [diffStatus] of diff(
-        change.document.getText(),
-        tree.rootNode.text,
-      )) {
-        if (diffStatus === 0) {
-          newIndex++;
-          oldIndex++;
-          if (changeStart !== null) {
-            const oldChangeEnd = tree.rootNode.descendantForIndex(oldIndex);
-            const newChangeEnd = tree.rootNode.descendantForIndex(newIndex);
-            tree.edit({
-              startIndex: changeStart.startIndex,
-              startPosition: changeStart.startPosition,
-              oldEndIndex: oldChangeEnd.endIndex,
-              oldEndPosition: oldChangeEnd.endPosition,
-              newEndIndex: newChangeEnd.endIndex,
-              newEndPosition: newChangeEnd.endPosition,
-            });
-            changeStart = null;
-          }
-        } else if (changeStart === null) {
-          changeStart = tree.rootNode.descendantForIndex(newIndex);
-        } else if (diffStatus === -1) {
-          oldIndex++;
-        } else {
-          newIndex++;
-        }
-      }
-    }
 
     context.trees[uri] = parser.parse(
       change.document.getText(),
